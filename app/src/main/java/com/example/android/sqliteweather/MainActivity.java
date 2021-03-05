@@ -3,6 +3,7 @@ package com.example.android.sqliteweather;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -16,13 +17,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -74,6 +79,8 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView cityItemsRV;
     private ProgressBar loadingIndicatorPB;
     private TextView errorMessageTV;
+    private TextView addLocationTV;
+    private String userText;
 
     private Toast errorToast;
 
@@ -95,6 +102,7 @@ public class MainActivity extends AppCompatActivity
         this.forecastListRV.setHasFixedSize(true);
         this.cityItemsRV.setLayoutManager(new LinearLayoutManager(this));
         this.cityItemsRV.setHasFixedSize(true);
+        this.addLocationTV = findViewById(R.id.tv_add_location);
 
 
         this.forecastAdapter = new ForecastAdapter(this);
@@ -174,6 +182,35 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    public void add_location(View v)
+    {
+        AlertDialog.Builder locationDialog = new AlertDialog.Builder(MainActivity.this);
+        locationDialog.setTitle("Enter a location");
+
+        final EditText locationInput = new EditText(MainActivity.this);
+        locationInput.setInputType(InputType.TYPE_CLASS_TEXT);
+        locationDialog.setView(locationInput);
+
+        locationDialog.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                userText = locationInput.getText().toString();
+                System.out.println("user entered in: " + userText);
+                updateLocationManually(userText, sharedPreferences);
+            }
+        });
+
+        locationDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        locationDialog.show();
+    }
+
+
     @Override
     public void onForecastItemClick(ForecastData forecastData) {
         Intent intent = new Intent(this, ForecastDetailActivity.class);
@@ -212,10 +249,35 @@ public class MainActivity extends AppCompatActivity
         this.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
     }
 
+    public void updateLocationManually(String location, SharedPreferences sharedPreferences)
+    {
+        databaseLocation2(location);
+        this.loadForecast2(location, sharedPreferences);
+    }
+
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         databaseLocation(sharedPreferences);
         this.loadForecast();
+    }
+
+    public void databaseLocation2(String userCity) {
+        CitiesRepo newCity = new CitiesRepo();
+        newCity.city = null;
+        newCity.timestamp = 0;
+        String city = userCity;
+        long timeSearched = System.currentTimeMillis();
+        if(city != null) {
+            newCity.city = city;
+            newCity.timestamp = timeSearched;
+            System.out.println("city: " + newCity.city + " timestamp: " + newCity.timestamp);
+            this.cityViewModel.insertCity(newCity);
+            drawerLayout.closeDrawers();
+        }
+
+        else {
+
+        }
     }
 
     public void databaseLocation(SharedPreferences sharedPreferences) {
@@ -227,13 +289,24 @@ public class MainActivity extends AppCompatActivity
         if(city != null) {
             newCity.city = city;
             newCity.timestamp = timeSearched;
-            System.out.println("city: " + newCity.city + " timestamp: " + newCity.timestamp);
             this.cityViewModel.insertCity(newCity);
         }
 
         else {
 
         }
+    }
+
+    private void loadForecast2(String location, SharedPreferences sharedPreferences) {
+        System.out.println("location: " + location);
+        this.fiveDayForecastViewModel.loadForecast(
+                location,
+                this.sharedPreferences.getString(
+                        getString(R.string.pref_units_key),
+                        getString(R.string.pref_units_default_value)
+                ),
+                OPENWEATHER_APPID
+        );
     }
 
     /**
