@@ -2,6 +2,7 @@ package com.example.android.sqliteweather;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
 import android.content.Intent;
@@ -26,6 +27,8 @@ public class ForecastDetailActivity extends AppCompatActivity {
     private ForecastData forecastData = null;
     private ForecastCity forecastCity = null;
 
+    private CityViewModel cityViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +36,9 @@ public class ForecastDetailActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         Intent intent = getIntent();
+
+        cityViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(CityViewModel.class);
+
 
         if (intent != null && intent.hasExtra(EXTRA_FORECAST_CITY)) {
             this.forecastCity = (ForecastCity)intent.getSerializableExtra(EXTRA_FORECAST_CITY);
