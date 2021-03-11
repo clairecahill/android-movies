@@ -45,7 +45,8 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener,
+        NavigationView.OnNavigationItemSelectedListener, CityAdapter.OnNavigationItemClickListener{
 //        implements MovieAdapter.OnMovieItemClickListener, TVShowsAdapter.OnTVShowClickListener,
 //        SharedPreferences.OnSharedPreferenceChangeListener,
 //        NavigationView.OnNavigationItemSelectedListener, CityAdapter.OnNavigationItemClickListener {
@@ -74,6 +75,12 @@ public class MainActivity extends AppCompatActivity{
 //    private static final String OPENWEATHER_APPID = BuildConfig.OPENWEATHER_API_KEY;
     private static final String OPENWEATHER_APPID = "2048a626b634d6fc16289af021a195e6";
     private static final String MOVIEDB_APIKEY = "a9de941ba40e3e48d10c7644969d4781";
+    private SharedPreferences sharedPreferences;
+    private DrawerLayout drawerLayout;
+    private ForecastCity forecastCity;
+    private Toast errorToast;
+    private RecyclerView cityItemsRV;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,12 +90,19 @@ public class MainActivity extends AppCompatActivity{
         ViewPager2 viewPager2 = findViewById(R.id.pager);
         viewPager2.setAdapter(new PageAdapter(this));
 
+        this.cityItemsRV = findViewById(R.id.rv_city);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_navigation_settings);
+
+        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        this.sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+        this.drawerLayout = findViewById(R.id.drawer_layout);
+
 
         TabLayout tabLayout = findViewById(R.id.tab_layout);
         TabLayoutMediator tabLayoutMediator = new TabLayoutMediator(
@@ -138,5 +152,84 @@ public class MainActivity extends AppCompatActivity{
 
             }
         });
+
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+    }
+
+    @Override
+    public void onNavigationItemClicked(CitiesRepo cities) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(getString(R.string.pref_location_key), cities.city);
+        editor.apply();
+        drawerLayout.closeDrawers();
+    }
+
+    private void viewForecastCityInMap() {
+        if (this.forecastCity != null) {
+            Uri forecastCityGeoUri = Uri.parse(getString(
+                    R.string.geo_uri,
+                    this.forecastCity.getLatitude(),
+                    this.forecastCity.getLongitude(),
+                    12
+            ));
+            Intent intent = new Intent(Intent.ACTION_VIEW, forecastCityGeoUri);
+            try {
+                startActivity(intent);
+            } catch (ActivityNotFoundException e) {
+                if (this.errorToast != null) {
+                    this.errorToast.cancel();
+                }
+                this.errorToast = Toast.makeText(
+                        this,
+                        getString(R.string.action_map_error),
+                        Toast.LENGTH_LONG
+                );
+                this.errorToast.show();
+            }
+        }
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_map:
+                viewForecastCityInMap();
+                return true;
+            case R.id.action_settings:
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
+                return true;
+            case android.R.id.home:
+                drawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        drawerLayout.closeDrawers();
+        switch(item.getItemId())
+        {
+            case R.id.navigation_settings:
+                Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                startActivity(settingsIntent);
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_main, menu);
+        return true;
     }
 }
