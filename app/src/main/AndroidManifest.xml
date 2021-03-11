@@ -18,6 +18,9 @@
             android:name="com.example.android.sqliteweather.PopularMovieDetailActivity"
             android:parentActivityName="com.example.android.sqliteweather.MainActivity" />
         <activity
+            android:name="com.example.android.sqliteweather.TVShowsDetailActivity"
+            android:parentActivityName="com.example.android.sqliteweather.MainActivity" />
+        <activity
             android:name="com.example.android.sqliteweather.MainActivity"
             android:launchMode="singleTop">
             <intent-filter>

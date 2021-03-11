@@ -34,7 +34,6 @@ public class PopularMovieDetailActivity extends AppCompatActivity {
             this.popularMovieData = (PopularMovieData) intent.getSerializableExtra(EXTRA_MOVIE_DATA);
             ImageView movieIconIV = findViewById(R.id.iv_detailed_movie_icon);
             String movieUrl = ICON_URL_FORMAT_STR + this.popularMovieData.getIconUrl();
-            System.out.println(movieUrl);
             Glide.with(this)
                     .load(movieUrl)
                     .into(movieIconIV);
