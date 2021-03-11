@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.example.android.sqliteweather.data.PopularMovieData;
@@ -26,6 +28,12 @@ public class PopularMovieDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
+
+        Toolbar toolbar = findViewById(R.id.movietoolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
 
@@ -58,10 +66,14 @@ public class PopularMovieDetailActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            voteAverageTV.setText(getString(R.string.movie_average_vote, popularMovieData.getVoteAverage()));
+            int voteAverage = (int) popularMovieData.getVoteAverage();
+            String voteAverageStr = String.valueOf(voteAverage) + "/10";
+            voteAverageTV.setText(getString(R.string.movie_average_vote, voteAverageStr));
             popularityTV.setText(getString(R.string.movie_pop, popularMovieData.getPopularity()));
             overviewTV.setText(getString(R.string.movie_overview, popularMovieData.getOverview()));
 
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setTitle(this.popularMovieData.getTitle());
         }
     }
 }

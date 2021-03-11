@@ -8,7 +8,7 @@
     <string name="movie_title">%1$s</string>
     <string name="movie_overview">%1$s</string>
     <string name="movie_release_date">%1$s</string>
-    <string name="movie_average_vote">%1$.2f%%</string>
+    <string name="movie_average_vote">%1$s</string>
 
     <string name="movies">Movies</string>
 
