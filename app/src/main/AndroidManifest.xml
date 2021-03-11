@@ -15,7 +15,7 @@
             android:name="com.example.android.sqliteweather.SettingsActivity"
             android:parentActivityName="com.example.android.sqliteweather.MainActivity" />
         <activity
-            android:name="com.example.android.sqliteweather.ForecastDetailActivity"
+            android:name="com.example.android.sqliteweather.PopularMovieDetailActivity"
             android:parentActivityName="com.example.android.sqliteweather.MainActivity" />
         <activity
             android:name="com.example.android.sqliteweather.MainActivity"

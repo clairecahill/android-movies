@@ -8,9 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,7 +18,6 @@ import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
@@ -34,9 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.sqliteweather.data.CitiesRepo;
-import com.example.android.sqliteweather.data.FiveDayForecast;
 import com.example.android.sqliteweather.data.ForecastCity;
-import com.example.android.sqliteweather.data.ForecastData;
 import com.example.android.sqliteweather.data.LoadingStatus;
 import com.example.android.sqliteweather.data.PopularMovieData;
 import com.example.android.sqliteweather.data.PopularMovies;
@@ -45,8 +40,7 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
-        implements ForecastAdapter.OnForecastItemClickListener,
-        MovieAdapter.OnMovieItemClickListener, SharedPreferences.OnSharedPreferenceChangeListener,
+        implements MovieAdapter.OnMovieItemClickListener, SharedPreferences.OnSharedPreferenceChangeListener,
         NavigationView.OnNavigationItemSelectedListener, CityAdapter.OnNavigationItemClickListener {
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -241,14 +235,23 @@ public class MainActivity extends AppCompatActivity
         locationDialog.show();
     }
 
-
     @Override
-    public void onForecastItemClick(ForecastData forecastData) {
-        Intent intent = new Intent(this, ForecastDetailActivity.class);
-        intent.putExtra(ForecastDetailActivity.EXTRA_FORECAST_DATA, forecastData);
-        intent.putExtra(ForecastDetailActivity.EXTRA_FORECAST_CITY, this.forecastCity);
+    public void onMovieItemClick(PopularMovieData popularMovieData) {
+        Intent intent = new Intent(this, PopularMovieDetailActivity.class);
+        intent.putExtra(PopularMovieDetailActivity.EXTRA_MOVIE_DATA, popularMovieData);
         startActivity(intent);
+//        Log.d(TAG, popularMovieData.getTitle() + " " + popularMovieData.getPopularity() + " " + popularMovieData.getIconUrl());
     }
+
+
+
+//    @Override
+//    public void onForecastItemClick(ForecastData forecastData) {
+//        Intent intent = new Intent(this, ForecastDetailActivity.class);
+//        intent.putExtra(ForecastDetailActivity.EXTRA_FORECAST_DATA, forecastData);
+//        intent.putExtra(ForecastDetailActivity.EXTRA_FORECAST_CITY, this.forecastCity);
+//        startActivity(intent);
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -412,8 +415,8 @@ public class MainActivity extends AppCompatActivity
         drawerLayout.closeDrawers();
     }
 
-    @Override
-    public void onMovieItemClick(PopularMovieData popularMovieDataData) {
-        Log.d(TAG, popularMovieDataData.getTitle() + " " + popularMovieDataData.getPopularity());
-    }
+//    @Override
+//    public void onMovieItemClick(PopularMovieData popularMovieDataData) {
+//        Log.d(TAG, popularMovieDataData.getTitle() + " " + popularMovieDataData.getPopularity());
+//    }
 }

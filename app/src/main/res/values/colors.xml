@@ -9,6 +9,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#808080</color>
 
+    <color name="yellow">#fdee00</color>
+
     <color name="high_temp">#F44336</color>
     <color name="low_temp">#03A9F4</color>
 
