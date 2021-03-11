@@ -45,6 +45,9 @@ public class TVShowFragment extends Fragment implements TVShowsAdapter.OnTVShowC
         this.tvShowsAdapter = new TVShowsAdapter(this);
         this.tvListRV.setAdapter(this.tvShowsAdapter);
 
+        getActivity().setTitle("TV Shows");
+        setHasOptionsMenu(true);
+
         this.loadPopularTVShows();
 
         this.tvShowsViewModel.getPopularTVShows().observe(

@@ -40,6 +40,7 @@ import com.example.android.sqliteweather.data.PopularTVShows;
 import com.example.android.sqliteweather.data.PopularTVShowsData;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayout.OnTabSelectedListener;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.List;
@@ -82,6 +83,13 @@ public class MainActivity extends AppCompatActivity{
         ViewPager2 viewPager2 = findViewById(R.id.pager);
         viewPager2.setAdapter(new PageAdapter(this));
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_navigation_settings);
+
         TabLayout tabLayout = findViewById(R.id.tab_layout);
         TabLayoutMediator tabLayoutMediator = new TabLayoutMediator(
                 tabLayout, viewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
@@ -89,26 +97,46 @@ public class MainActivity extends AppCompatActivity{
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
                 switch (position) {
                     case 0: {
-                        tab.setText("Movie");
+                        tab.setText("Movies");
                         break;
                     }
 
                     case 1: {
-                        tab.setText("TV");
+                        tab.setText("TV Shows");
                         break;
                     }
                 }
             }
         }
         );
-
         tabLayoutMediator.attach();
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener()
+        {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if (tab.getPosition() == 0)
+                {
+                    ActionBar actionBar = getSupportActionBar();
+                    actionBar.setTitle("Popular Movies");
+                }
 
-        ActionBar actionbar = getSupportActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setHomeAsUpIndicator(R.drawable.ic_navigation_settings);
+                else
+                {
+                    ActionBar actionBar = getSupportActionBar();
+                    actionBar.setTitle("Popular TV Shows");
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 }

@@ -1,8 +1,10 @@
 package com.example.android.sqliteweather;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -47,6 +49,8 @@ public class MovieFragment extends Fragment implements MovieAdapter.OnMovieItemC
         this.movieAdapter = new MovieAdapter(this);
         this.movieListRV.setAdapter(this.movieAdapter);
 
+        getActivity().setTitle("Movies");
+
         this.loadPopularMovies();
 
         this.movieViewModel.getPopularMovies().observe(
@@ -71,4 +75,5 @@ public class MovieFragment extends Fragment implements MovieAdapter.OnMovieItemC
         intent.putExtra(PopularMovieDetailActivity.EXTRA_MOVIE_DATA, popularMovieData);
         startActivity(intent);
     }
+
 }

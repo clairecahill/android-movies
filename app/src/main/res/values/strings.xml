@@ -10,6 +10,8 @@
     <string name="movie_release_date">%1$s</string>
     <string name="movie_average_vote">%1$.2f%%</string>
 
+    <string name="movies">Movies</string>
+
     <string name="forecast_date">%1$tb %1$te</string>
     <string name="forecast_time">%1$tl:%1$tM %1$tp</string>
     <string name="forecast_temp">%1$d°%2$s</string>
