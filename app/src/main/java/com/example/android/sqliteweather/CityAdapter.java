@@ -1,24 +1,15 @@
 package com.example.android.sqliteweather;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.example.android.sqliteweather.data.CitiesRepo;
 import com.example.android.sqliteweather.data.FiveDayForecast;
-import com.example.android.sqliteweather.data.ForecastData;
-import com.example.android.sqliteweather.utils.OpenWeatherUtils;
 
-import java.util.Calendar;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
@@ -45,7 +36,7 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.LocationViewHo
     @Override
     public LocationViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View itemView = inflater.inflate(R.layout.city_item, parent, false);
+        View itemView = inflater.inflate(R.layout.movie_item, parent, false);
         return new LocationViewHolder(itemView);
     }
 
@@ -67,7 +58,7 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.LocationViewHo
 
         public LocationViewHolder(View itemView) {
             super(itemView);
-            tv = itemView.findViewById(R.id.city_text);
+            tv = itemView.findViewById(R.id.movie_saved_item);
             itemView.setOnClickListener(this);
         }
 

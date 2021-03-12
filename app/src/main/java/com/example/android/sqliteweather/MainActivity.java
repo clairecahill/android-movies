@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private DrawerLayout drawerLayout;
     private ForecastCity forecastCity;
     private Toast errorToast;
-    private RecyclerView cityItemsRV;
+    private RecyclerView movieItemsRV;
 
 
     @Override
@@ -90,7 +90,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         ViewPager2 viewPager2 = findViewById(R.id.pager);
         viewPager2.setAdapter(new PageAdapter(this));
 
-        this.cityItemsRV = findViewById(R.id.rv_city);
+        // Navigation Drawer: recycler view and drawer layout initialization
+        this.drawerLayout = findViewById(R.id.drawer_layout);
+        this.movieItemsRV = findViewById(R.id.nav_drawer_id);
+        this.movieItemsRV.setLayoutManager(new LinearLayoutManager(this));
+        this.movieItemsRV.setHasFixedSize(true);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -232,4 +236,65 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
+
+    public void addToSavedLocations(View view){
+        AlertDialog.Builder ld = new AlertDialog.Builder(MainActivity.this);
+        ld.setTitle("Search For Location:");
+        final EditText location = new EditText(MainActivity.this);
+        final String[] input = new String[1];
+        location.setInputType(InputType.TYPE_CLASS_TEXT);
+        ld.setView(location);
+
+        ld.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                input[0] = location.getText().toString();
+//                updateLocationsInDB(null, input[0]);
+//                loadForecast(input[0]);
+            }
+        });
+
+        ld.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        ld.show();
+    }
+
+//    public void updateLocationsInDB(SharedPreferences sharedPreferences, String location){
+//        LocationsRepository addedLocation = new LocationsRepository();
+//        long timeOfUpdate = System.currentTimeMillis();
+//        String newLocation = location;
+//
+//        if (sharedPreferences != null) {
+//            newLocation = sharedPreferences.getString(
+//                    getString(R.string.pref_location_key),
+//                    getString(R.string.pref_default_location));
+//        }
+//
+//        if (newLocation != null){
+//            addedLocation.location = newLocation.toUpperCase();
+//            addedLocation.timestamp = timeOfUpdate;
+//            this.mSavedLocationsVM.insertLocation(addedLocation);
+//        } else { }
+//    }
+//
+//    /**
+//     * Triggers a new forecast to be fetched based on current preference values.
+//     */
+//    private void loadForecast(String location) {
+//        this.fiveDayForecastViewModel.loadForecast(
+//                location != null ? location : this.sharedPreferences.getString(
+//                        getString(R.string.pref_location_key),
+//                        "Corvallis,OR,US"
+//                ),
+//                this.sharedPreferences.getString(
+//                        getString(R.string.pref_units_key),
+//                        getString(R.string.pref_units_default_value)
+//                ),
+//                OPENWEATHER_APPID
+//        );
+//    }
 }
