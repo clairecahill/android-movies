@@ -1,23 +1,25 @@
 package com.example.android.sqliteweather;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.android.sqliteweather.data.PopularMovieData;
+import com.example.android.sqliteweather.data.MovieData;
+import com.example.android.sqliteweather.data.MovieRepository;
 import com.example.android.sqliteweather.data.PopularMovies;
+import com.example.android.sqliteweather.data.PopularResult;
 
+import java.util.ArrayList;
 
 
 /**
@@ -26,10 +28,14 @@ import com.example.android.sqliteweather.data.PopularMovies;
  * create an instance of this fragment.
  */
 public class MovieFragment extends Fragment implements MovieAdapter.OnMovieItemClickListener {
+    private static final String TAG = MovieFragment.class.getSimpleName();
+
     private static final String MOVIEDB_APIKEY = "a9de941ba40e3e48d10c7644969d4781";
     private RecyclerView movieListRV;
     private MovieAdapter movieAdapter;
     private MovieViewModel movieViewModel;
+
+    private ArrayList<Integer> popularMovieIds;
 
     public MovieFragment()
     {
@@ -51,13 +57,31 @@ public class MovieFragment extends Fragment implements MovieAdapter.OnMovieItemC
 
         getActivity().setTitle("Movies");
 
+        this.popularMovieIds = new ArrayList<>();
         this.loadPopularMovies();
 
         this.movieViewModel.getPopularMovies().observe(
                 getActivity(), new Observer<PopularMovies>() {
                     @Override
                     public void onChanged(PopularMovies popularMovies) {
-                        movieAdapter.updatePopularMovies(popularMovies);
+                        if (popularMovies != null) {
+                            popularMovieIds.clear();
+                            for (PopularResult result : popularMovies.getPopularMovieResults()) {
+                                popularMovieIds.add(result.getId());
+                            }
+                            loadMovieData(MOVIEDB_APIKEY, popularMovieIds);
+                        }
+                    }
+                }
+        );
+
+        this.movieViewModel.getMovieData().observe(
+                getActivity(), new Observer<ArrayList<MovieData>>() {
+                    @Override
+                    public void onChanged(ArrayList<MovieData> movieData) {
+                        if (movieData != null && movieData.size() == popularMovieIds.size()) {
+                            movieAdapter.updatePopularMovies(movieData);
+                        }
                     }
                 }
         );
@@ -69,8 +93,12 @@ public class MovieFragment extends Fragment implements MovieAdapter.OnMovieItemC
         this.movieViewModel.loadPopularMovies(MOVIEDB_APIKEY);
     }
 
+    private void loadMovieData(String apiKey, ArrayList<Integer> ids) {
+        this.movieViewModel.loadMovieData(apiKey, ids);
+    }
+
     @Override
-    public void onMovieItemClick(PopularMovieData popularMovieData) {
+    public void onMovieItemClick(MovieData popularMovieData) {
         Intent intent = new Intent(getActivity(), PopularMovieDetailActivity.class);
         intent.putExtra(PopularMovieDetailActivity.EXTRA_MOVIE_DATA, popularMovieData);
         startActivity(intent);

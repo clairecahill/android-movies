@@ -10,7 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
-import com.example.android.sqliteweather.data.PopularMovieData;
+import com.example.android.sqliteweather.data.MovieData;
+import com.example.android.sqliteweather.data.PopularResult;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,9 +19,9 @@ import java.util.Date;
 
 public class PopularMovieDetailActivity extends AppCompatActivity {
     private final static String ICON_URL_FORMAT_STR = "https://image.tmdb.org/t/p/w500";
-    public static final String EXTRA_MOVIE_DATA = "PopularMovieDetailActivity.PopularMovieData";
+    public static final String EXTRA_MOVIE_DATA = "PopularMovieDetailActivity.MovieData";
 
-    private PopularMovieData popularMovieData = null;
+    private MovieData popularMovieData = null;
 
     // view model if needed
 
@@ -39,7 +40,7 @@ public class PopularMovieDetailActivity extends AppCompatActivity {
 
         if (intent != null && intent.hasExtra(EXTRA_MOVIE_DATA))
         {
-            this.popularMovieData = (PopularMovieData) intent.getSerializableExtra(EXTRA_MOVIE_DATA);
+            this.popularMovieData = (MovieData) intent.getSerializableExtra(EXTRA_MOVIE_DATA);
             ImageView movieIconIV = findViewById(R.id.iv_detailed_movie_icon);
             String movieUrl = ICON_URL_FORMAT_STR + this.popularMovieData.getIconUrl();
             Glide.with(this)

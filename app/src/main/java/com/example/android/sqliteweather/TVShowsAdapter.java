@@ -9,15 +9,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.android.sqliteweather.data.PopularTVShows;
-import com.example.android.sqliteweather.data.PopularTVShowsData;
+import com.example.android.sqliteweather.data.TVShowsData;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class TVShowsAdapter extends RecyclerView.Adapter<TVShowsAdapter.TVShowItemViewHolder> {
-    private PopularTVShows popularTVShows;
+    private ArrayList<TVShowsData> TVShows;
     private OnTVShowClickListener onTVShowClickListener;
 
     public interface OnTVShowClickListener {
-        void onTVItemClick(PopularTVShowsData popularTVShows);
+        void onTVItemClick(TVShowsData TVShows);
     }
 
     public TVShowsAdapter(TVShowsAdapter.OnTVShowClickListener onTVShowClickListener) {
@@ -34,49 +38,71 @@ public class TVShowsAdapter extends RecyclerView.Adapter<TVShowsAdapter.TVShowIt
 
     @Override
     public void onBindViewHolder(@NonNull TVShowItemViewHolder holder, int position) {
-        holder.bind(this.popularTVShows.getPopularTVResults().get(position));
+        holder.bind(this.TVShows.get(position));
     }
 
 
-    public void updatePopularTVShows(PopularTVShows popularTVShows) {
-        this.popularTVShows = popularTVShows;
+    public void updatePopularTVShows(ArrayList<TVShowsData> TVShows) {
+        this.TVShows = TVShows;
         notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        if (this.popularTVShows == null || this.popularTVShows.getPopularTVResults() == null) {
+        if (this.TVShows == null) {
             return 0;
         } else {
-            return this.popularTVShows.getPopularTVResults().size();
+            return this.TVShows.size();
         }
     }
 
     class TVShowItemViewHolder extends RecyclerView.ViewHolder {
         final private TextView titleTV;
         final private TextView popularityTV;
+        final private TextView voteAveTV;
+        final private TextView releaseDateTV;
+        final private TextView genreTV;
 
 
         public TVShowItemViewHolder(@NonNull View itemView) {
             super(itemView);
-            titleTV = itemView.findViewById(R.id.tv_show_title);
-            popularityTV = itemView.findViewById(R.id.tv_show_pop);
+            titleTV = itemView.findViewById(R.id.tv_tv_title);
+            popularityTV = itemView.findViewById(R.id.tv_popularity);
+            voteAveTV = itemView.findViewById(R.id.tv_vote_average);
+            releaseDateTV = itemView.findViewById(R.id.tv_release_date);
+            genreTV = itemView.findViewById(R.id.tv_tv_genre);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onTVShowClickListener.onTVItemClick(
-                            popularTVShows.getPopularTVResults().get(getAdapterPosition())
+                            TVShows.get(getAdapterPosition())
                     );
                 }
             });
         }
 
-        public void bind(PopularTVShowsData popularTVShows) {
+        public void bind(TVShowsData popularTVShows) {
             Context ctx = this.itemView.getContext();
 
             titleTV.setText(ctx.getString(R.string.movie_title, popularTVShows.getTitle()));
             popularityTV.setText(ctx.getString(R.string.movie_pop, popularTVShows.getPopularity()));
+            int voteAverage = (int) popularTVShows.getVoteAverage();
+            String voteAverageStr = String.valueOf(voteAverage) + "/10";
+            voteAveTV.setText(ctx.getString(R.string.movie_average_vote, voteAverageStr));
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdf2 = new SimpleDateFormat("MMMM dd, yyyy");
+            Date convertedDate = null;
+            try {
+                convertedDate = sdf.parse(popularTVShows.getFirstAirDate());
+                String date = sdf2.format(convertedDate);
+                releaseDateTV.setText(ctx.getString(R.string.movie_release_date, date));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            genreTV.setText(ctx.getString(R.string.genre, popularTVShows.getGenre()));
 
         }
 

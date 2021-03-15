@@ -8,31 +8,29 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.util.ArrayList;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MovieRepository {
-    private static final String TAG = MovieRepository.class.getSimpleName();
+public class PopularMovieRepository {
+    private static final String TAG = PopularMovieRepository.class.getSimpleName();
     private static final String BASE_URL = "https://api.themoviedb.org/3/";
 
-    private MutableLiveData<ArrayList<MovieData>> movies;
+    private MutableLiveData<PopularMovies> popularMovies;
     private MutableLiveData<LoadingStatus> loadingStatus;
     private MovieService movieService;
 
-    public MovieRepository() {
-        this.movies = new MutableLiveData<>();
-        this.movies.setValue(null);
+    public PopularMovieRepository() {
+        this.popularMovies = new MutableLiveData<>();
+        this.popularMovies.setValue(null);
 
         this.loadingStatus = new MutableLiveData<>();
         this.loadingStatus.setValue(LoadingStatus.SUCCESS);
 
         Gson gson = new GsonBuilder()
-                .registerTypeAdapter(MovieData.class, new MovieData.JsonDeserializer())
+                .registerTypeAdapter(PopularResult.class, new PopularResult.JsonDeserializer())
                 .create();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -41,47 +39,42 @@ public class MovieRepository {
         this.movieService = retrofit.create(MovieService.class);
     }
 
-    public LiveData<ArrayList<MovieData>> getMovies() {
-        return this.movies;
+    public LiveData<PopularMovies> getPopularMovies() {
+        return this.popularMovies;
     }
 
     public LiveData<LoadingStatus> getLoadingStatus() {
         return this.loadingStatus;
     }
 
-    public void loadMovieData(String apiKey, ArrayList<Integer> ids) {
+    public void loadPopularMovies(String apiKey) {
 //        if (shouldFetchForecast(location, units)) {
-            Log.d(TAG, "fetching new movie data");
-            this.movies.setValue(null);
+            Log.d(TAG, "fetching new popular movie data");
+            this.popularMovies.setValue(null);
             this.loadingStatus.setValue(LoadingStatus.LOADING);
-            ArrayList<MovieData> tempMovies = new ArrayList<>();
-
-            for (int i = 0; i < ids.size(); i++) {
-                Call<MovieData> req = this.movieService.fetchMovieData(String.valueOf(ids.get(i)), apiKey);
-                req.enqueue(new Callback<MovieData>() {
-                    @Override
-                    public void onResponse(Call<MovieData> call, Response<MovieData> response) {
-                        if (response.code() == 200) {
-//                            Log.d(TAG, "successful response");
-                            tempMovies.add(response.body());
-                            movies.setValue(tempMovies);
-                            loadingStatus.setValue(LoadingStatus.SUCCESS);
-                        } else {
-                            loadingStatus.setValue(LoadingStatus.ERROR);
-                            Log.d(TAG, "unsuccessful API request: " + call.request().url());
-                            Log.d(TAG, "  -- response status code: " + response.code());
-                            Log.d(TAG, "  -- response: " + response.toString());
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<MovieData> call, Throwable t) {
+            Call<PopularMovies> req = this.movieService.fetchPopularMovies(apiKey);
+            req.enqueue(new Callback<PopularMovies>() {
+                @Override
+                public void onResponse(Call<PopularMovies> call, Response<PopularMovies> response) {
+                    if (response.code() == 200) {
+                        Log.d(TAG, "successful response");
+                        popularMovies.setValue(response.body());
+                        loadingStatus.setValue(LoadingStatus.SUCCESS);
+                    } else {
                         loadingStatus.setValue(LoadingStatus.ERROR);
                         Log.d(TAG, "unsuccessful API request: " + call.request().url());
-                        t.printStackTrace();
+                        Log.d(TAG, "  -- response status code: " + response.code());
+                        Log.d(TAG, "  -- response: " + response.toString());
                     }
-                });
-            }
+                }
+
+                @Override
+                public void onFailure(Call<PopularMovies> call, Throwable t) {
+                    loadingStatus.setValue(LoadingStatus.ERROR);
+                    Log.d(TAG, "unsuccessful API request: " + call.request().url());
+                    t.printStackTrace();
+                }
+            });
 //        } else {
 //            Log.d(TAG, "using cached forecast data for location: " + location + ", units: " + units);
 //        }

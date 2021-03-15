@@ -6,9 +6,9 @@ import java.util.ArrayList;
 
 public class PopularMovies {
     @SerializedName("results")
-    private ArrayList<PopularMovieData> popularMovieResults;
+    private ArrayList<PopularResult> popularMovieResults;
 
-    public ArrayList<PopularMovieData> getPopularMovieResults() {
+    public ArrayList<PopularResult> getPopularMovieResults() {
         return popularMovieResults;
     }
 
