@@ -4,11 +4,13 @@
     <string name="loading_error">Unable to fetch forecast data.  Please check your internet connection.\n\nError message: %1$s</string>
     <string name="action_map_error">No app was found to map the forecast location.  Please install a maps app on your device and try again.</string>
 
-    <string name="movie_pop">%1$.2f%%</string>
+    <string name="movie_pop">%1$.1f%%</string>
     <string name="movie_title">%1$s</string>
     <string name="movie_overview">%1$s</string>
     <string name="movie_release_date">%1$s</string>
     <string name="movie_average_vote">%1$s</string>
+
+    <string name="genre">%1$s</string>
 
     <string name="movies">Movies</string>
 

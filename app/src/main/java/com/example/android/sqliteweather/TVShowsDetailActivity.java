@@ -10,9 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
-import com.example.android.sqliteweather.data.PopularMovieData;
-import com.example.android.sqliteweather.data.PopularTVShows;
-import com.example.android.sqliteweather.data.PopularTVShowsData;
+import com.example.android.sqliteweather.data.TVShowsData;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,7 +20,7 @@ public class TVShowsDetailActivity extends AppCompatActivity {
     private final static String ICON_URL_FORMAT_STR = "https://image.tmdb.org/t/p/w500";
     public static final String EXTRA_TV_DATA = "TVShowsDetailActivity.PopularTVShowsData";
 
-    private PopularTVShowsData popularTVShowsData = null;
+    private TVShowsData TVShowsData = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,15 +37,15 @@ public class TVShowsDetailActivity extends AppCompatActivity {
 
         if (intent != null && intent.hasExtra(EXTRA_TV_DATA))
         {
-            this.popularTVShowsData = (PopularTVShowsData) intent.getSerializableExtra(EXTRA_TV_DATA);
+            this.TVShowsData = (TVShowsData) intent.getSerializableExtra(EXTRA_TV_DATA);
             ImageView movieIconIV = findViewById(R.id.iv_detailed_tv_icon);
-            String movieUrl = ICON_URL_FORMAT_STR + this.popularTVShowsData.getIconUrl();
+            String movieUrl = ICON_URL_FORMAT_STR + this.TVShowsData.getIconUrl();
             Glide.with(this)
                     .load(movieUrl)
                     .into(movieIconIV);
 
             TextView popularMovieDetailedDataTV = findViewById(R.id.tv_detailed_show_title);
-            popularMovieDetailedDataTV.setText(this.popularTVShowsData.getTitle());
+            popularMovieDetailedDataTV.setText(this.TVShowsData.getTitle());
 
             TextView popularityTV = findViewById(R.id.tv_detailed_show_popularity);
             TextView overviewTV = findViewById(R.id.tv_detailed_show_overview);
@@ -58,22 +56,22 @@ public class TVShowsDetailActivity extends AppCompatActivity {
             SimpleDateFormat sdf2 = new SimpleDateFormat("MMMM dd, yyyy");
             Date convertedDate = null;
             try {
-                convertedDate = sdf.parse(popularTVShowsData.getFirstAirDate());
+                convertedDate = sdf.parse(TVShowsData.getFirstAirDate());
                 String date = sdf2.format(convertedDate);
                 releaseDateTV.setText(getString(R.string.movie_release_date, date));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
 
-            int voteAverage = (int) popularTVShowsData.getVoteAverage();
+            int voteAverage = (int) TVShowsData.getVoteAverage();
             String voteAverageStr = String.valueOf(voteAverage) + "/10";
 
             voteAverageTV.setText(getString(R.string.movie_average_vote, voteAverageStr));
-            popularityTV.setText(getString(R.string.movie_pop, popularTVShowsData.getPopularity()));
-            overviewTV.setText(getString(R.string.movie_overview, popularTVShowsData.getOverview()));
+            popularityTV.setText(getString(R.string.movie_pop, TVShowsData.getPopularity()));
+            overviewTV.setText(getString(R.string.movie_overview, TVShowsData.getOverview()));
 
             ActionBar actionBar = getSupportActionBar();
-            actionBar.setTitle(this.popularTVShowsData.getTitle());
+            actionBar.setTitle(this.TVShowsData.getTitle());
 
         }
 
