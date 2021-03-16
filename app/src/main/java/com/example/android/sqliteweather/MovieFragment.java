@@ -13,7 +13,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import com.example.android.sqliteweather.data.LoadingStatus;
 import com.example.android.sqliteweather.data.MovieData;
 import com.example.android.sqliteweather.data.MovieRepository;
 import com.example.android.sqliteweather.data.PopularMovies;
@@ -34,6 +37,8 @@ public class MovieFragment extends Fragment implements MovieAdapter.OnMovieItemC
     private RecyclerView movieListRV;
     private MovieAdapter movieAdapter;
     private MovieViewModel movieViewModel;
+    private ProgressBar loadingIndicator;
+    private TextView errorMessageTV;
 
     private ArrayList<Integer> popularMovieIds;
 
@@ -47,6 +52,8 @@ public class MovieFragment extends Fragment implements MovieAdapter.OnMovieItemC
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_movie, container, false);
+        this.loadingIndicator = view.findViewById(R.id.pb_loading_indicator);
+        this.errorMessageTV = view.findViewById(R.id.tv_error_message);
         this.movieListRV = view.findViewById(R.id.rv_movie_list);
         this.movieListRV.setLayoutManager(new LinearLayoutManager(getActivity()));
         this.movieListRV.setHasFixedSize(true);
@@ -81,6 +88,27 @@ public class MovieFragment extends Fragment implements MovieAdapter.OnMovieItemC
                     public void onChanged(ArrayList<MovieData> movieData) {
                         if (movieData != null && movieData.size() == popularMovieIds.size()) {
                             movieAdapter.updatePopularMovies(movieData);
+                        }
+                    }
+                }
+        );
+
+        this.movieViewModel.getLoadingStatus().observe(
+                getActivity(),
+                new Observer<LoadingStatus>() {
+                    @Override
+                    public void onChanged(LoadingStatus loadingStatus) {
+                        if (loadingStatus == LoadingStatus.LOADING) {
+                            loadingIndicator.setVisibility(View.VISIBLE);
+                        } else if (loadingStatus == LoadingStatus.SUCCESS) {
+                            loadingIndicator.setVisibility(View.INVISIBLE);
+                            movieListRV.setVisibility(View.VISIBLE);
+                            errorMessageTV.setVisibility(View.INVISIBLE);
+                        } else {
+                            loadingIndicator.setVisibility(View.INVISIBLE);
+                            movieListRV.setVisibility(View.INVISIBLE);
+                            errorMessageTV.setVisibility(View.VISIBLE);
+                            errorMessageTV.setText(getString(R.string.loading_error, "ヽ(。_°)ノ"));
                         }
                     }
                 }
