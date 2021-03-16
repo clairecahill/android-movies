@@ -28,11 +28,46 @@
 
     <string name="geo_uri">geo:%1$f,%2$f?z=%3$d</string>
 
-    <string name="share_forecast_text">Weather forecast from %1$s for %2$s, %3$s: %4$s with a high of %5$s, a low of %6$s, and a %7$s chance of precipitation.</string>
+<!--    <string name="share_forecast_text">Weather forecast from %1$s for %2$s, %3$s: %4$s with a high of %5$s, a low of %6$s, and a %7$s chance of precipitation.</string>-->
+
+    <string name="pref_sort_by">Sort By</string>
+    <string name="pref_sort_by_def">popularity.desc</string>
+
+    <!--    Values for sort by option-->
+    <string name="pop_asc_val">popularity.asc</string>
+    <string name="pop_desc_val">popularity.desc</string>
+    <string name="rd_asc_val">release_date.asc</string>
+    <string name="rd_desc_val">release_date.desc</string>
+    <string name="rev_asc_val">revenue.asc</string>
+    <string name="rev_desc_val">revenue.desc</string>
+    <string name="prd_asc_val">primary_release_date.asc</string>
+    <string name="prd_desc_val">primary_release_date.desc</string>
+    <string name="ot_asc_val">original_title.asc</string>
+    <string name="ot_desc_val">original_title.desc</string>
+    <string name="va_asc_val">vote_average.asc</string>
+    <string name="va_desc_val">vote_average.desc</string>
+    <string name="vc_asc_val">vote_count.asc</string>
+    <string name="vc_desc_val">vote_count.desc</string>
+
+<!--    Strings for sort by option-->
+    <string name="pop_asc_ent">popularity ascending</string>
+    <string name="pop_desc_ent">popularity descending</string>
+    <string name="rd_asc_ent">release date ascending</string>
+    <string name="rd_desc_ent">release date descending</string>
+    <string name="rev_asc_ent">revenue ascending</string>
+    <string name="rev_desc_ent">revenue descending</string>
+    <string name="prd_asc_ent">primary release date ascending</string>
+    <string name="prd_desc_ent">primary release date descending</string>
+    <string name="ot_asc_ent">original title ascending</string>
+    <string name="ot_desc_ent">original title descending</string>
+    <string name="va_asc_ent">vote average ascending</string>
+    <string name="va_desc_ent">vote average descending</string>
+    <string name="vc_asc_ent">vote count ascending</string>
+    <string name="vc_desc_ent">vote count descending</string>
+
 
     <!-- Strings for location preference -->
     <string name="pref_location_key" translatable="false">pref_location</string>
-    <string name="pref_location_title">Forecast location</string>
     <string name="pref_default_location">Corvallis,OR,US</string>
 
     <!-- Strings for units preference -->
