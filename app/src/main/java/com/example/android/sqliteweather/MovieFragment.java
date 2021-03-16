@@ -1,11 +1,13 @@
 package com.example.android.sqliteweather;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,6 +38,7 @@ public class MovieFragment extends Fragment implements MovieAdapter.OnMovieItemC
     private MovieViewModel movieViewModel;
 
     private ArrayList<Integer> popularMovieIds;
+    private SharedPreferences sharedPreferences;
 
     public MovieFragment()
     {
@@ -54,11 +57,15 @@ public class MovieFragment extends Fragment implements MovieAdapter.OnMovieItemC
         this.movieViewModel = new ViewModelProvider(this).get(MovieViewModel.class);
         this.movieAdapter = new MovieAdapter(this);
         this.movieListRV.setAdapter(this.movieAdapter);
+        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         getActivity().setTitle("Movies");
 
         this.popularMovieIds = new ArrayList<>();
-        this.loadPopularMovies();
+
+        String sort = sharedPreferences.getString(getString(R.string.pref_sort_by), "");
+        this.loadSortedMovies(sort);
+        //this.loadPopularMovies();
 
         this.movieViewModel.getPopularMovies().observe(
                 getActivity(), new Observer<PopularMovies>() {
@@ -91,6 +98,10 @@ public class MovieFragment extends Fragment implements MovieAdapter.OnMovieItemC
 
     private void loadPopularMovies() {
         this.movieViewModel.loadPopularMovies(MOVIEDB_APIKEY);
+    }
+
+    private void loadSortedMovies(String sort) {
+        this.movieViewModel.loadPopularMovies(MOVIEDB_APIKEY, sort);
     }
 
     private void loadMovieData(String apiKey, ArrayList<Integer> ids) {

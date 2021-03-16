@@ -31,6 +31,7 @@
 <!--    <string name="share_forecast_text">Weather forecast from %1$s for %2$s, %3$s: %4$s with a high of %5$s, a low of %6$s, and a %7$s chance of precipitation.</string>-->
 
     <string name="pref_sort_by">Sort By</string>
+    <string name="pref_sort_by_key">sort_by</string>
     <string name="pref_sort_by_def">popularity.desc</string>
 
     <!--    Values for sort by option-->

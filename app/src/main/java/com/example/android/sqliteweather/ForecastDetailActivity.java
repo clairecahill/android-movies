@@ -142,37 +142,37 @@ public class ForecastDetailActivity extends AppCompatActivity {
                     getString(R.string.pref_units_key),
                     getString(R.string.pref_units_default_value)
             );
-            String shareText = getString(
-                    R.string.share_forecast_text,
-                    getString(R.string.app_name),
-                    this.forecastCity.getName(),
-                    getString(
-                            R.string.forecast_date_time,
-                            getString(R.string.forecast_date, date),
-                            getString(R.string.forecast_time, date)
-                    ),
-                    this.forecastData.getShortDescription(),
-                    getString(
-                            R.string.forecast_temp,
-                            forecastData.getHighTemp(),
-                            /* get correct temperature unit for unit preference setting */
-                            OpenWeatherUtils.getTemperatureDisplayForUnitsPref(unitsPref, this)
-                    ),
-                    getString(
-                            R.string.forecast_temp,
-                            forecastData.getLowTemp(),
-                            /* get correct temperature unit for unit preference setting */
-                            OpenWeatherUtils.getTemperatureDisplayForUnitsPref(unitsPref, this)
-                    ),
-                    getString(R.string.forecast_pop, this.forecastData.getPop())
-            );
-
-            Intent sendIntent = new Intent(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, shareText);
-            sendIntent.setType("text/plain");
-
-            Intent chooserIntent = Intent.createChooser(sendIntent, null);
-            startActivity(chooserIntent);
+//            String shareText = getString(
+//                    R.string.share_forecast_text,
+//                    getString(R.string.app_name),
+//                    this.forecastCity.getName(),
+//                    getString(
+//                            R.string.forecast_date_time,
+//                            getString(R.string.forecast_date, date),
+//                            getString(R.string.forecast_time, date)
+//                    ),
+//                    this.forecastData.getShortDescription(),
+//                    getString(
+//                            R.string.forecast_temp,
+//                            forecastData.getHighTemp(),
+//                            /* get correct temperature unit for unit preference setting */
+//                            OpenWeatherUtils.getTemperatureDisplayForUnitsPref(unitsPref, this)
+//                    ),
+//                    getString(
+//                            R.string.forecast_temp,
+//                            forecastData.getLowTemp(),
+//                            /* get correct temperature unit for unit preference setting */
+//                            OpenWeatherUtils.getTemperatureDisplayForUnitsPref(unitsPref, this)
+//                    ),
+//                    getString(R.string.forecast_pop, this.forecastData.getPop())
+//            );
+//
+//            Intent sendIntent = new Intent(Intent.ACTION_SEND);
+//            sendIntent.putExtra(Intent.EXTRA_TEXT, shareText);
+//            sendIntent.setType("text/plain");
+//
+//            Intent chooserIntent = Intent.createChooser(sendIntent, null);
+//            startActivity(chooserIntent);
         }
     }
 }

@@ -1,5 +1,7 @@
 package com.example.android.sqliteweather.data;
 
+import android.util.Log;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
@@ -50,16 +52,29 @@ public class MovieData implements Serializable {
             JsonObject resultsObj = json.getAsJsonObject();
             JsonArray genreArr = resultsObj.getAsJsonArray("genres");
             JsonObject genreObj = genreArr.get(0).getAsJsonObject();
+            //Log.d("heeheehoo", "genreObj" + genreObj);
 
-            return new MovieData(
-                resultsObj.getAsJsonPrimitive("title").getAsString(),
-                (float)Math.round(resultsObj.getAsJsonPrimitive("popularity").getAsFloat()) / 100,
-                    resultsObj.getAsJsonPrimitive("overview").getAsString(),
-                    resultsObj.getAsJsonPrimitive("poster_path").getAsString(),
-                    resultsObj.getAsJsonPrimitive("release_date").getAsString(),
-                    (float)Math.round(resultsObj.getAsJsonPrimitive("vote_average").getAsFloat()),
-                    genreObj.getAsJsonPrimitive("name").getAsString()
-            );
+            if(resultsObj.getAsJsonPrimitive("poster_path")!=null) {
+                return new MovieData(
+                        resultsObj.getAsJsonPrimitive("title").getAsString(),
+                        (float)Math.round(resultsObj.getAsJsonPrimitive("popularity").getAsFloat()) / 100,
+                        resultsObj.getAsJsonPrimitive("overview").getAsString(),
+                        resultsObj.getAsJsonPrimitive("poster_path").getAsString(),
+                        resultsObj.getAsJsonPrimitive("release_date").getAsString(),
+                        (float)Math.round(resultsObj.getAsJsonPrimitive("vote_average").getAsFloat()),
+                        genreObj.getAsJsonPrimitive("name").getAsString()
+                );
+            } else {
+                return new MovieData(
+                        resultsObj.getAsJsonPrimitive("title").getAsString(),
+                        (float)Math.round(resultsObj.getAsJsonPrimitive("popularity").getAsFloat()) / 100,
+                        resultsObj.getAsJsonPrimitive("overview").getAsString(),
+                        null,
+                        resultsObj.getAsJsonPrimitive("release_date").getAsString(),
+                        (float)Math.round(resultsObj.getAsJsonPrimitive("vote_average").getAsFloat()),
+                        genreObj.getAsJsonPrimitive("name").getAsString()
+                );
+            }
         }
     }
 }
