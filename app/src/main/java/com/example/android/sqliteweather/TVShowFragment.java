@@ -12,10 +12,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import com.example.android.sqliteweather.data.LoadingStatus;
 import com.example.android.sqliteweather.data.PopularResult;
 import com.example.android.sqliteweather.data.PopularTVShows;
 import com.example.android.sqliteweather.data.TVShowsData;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -29,6 +34,8 @@ public class TVShowFragment extends Fragment implements TVShowsAdapter.OnTVShowC
     private RecyclerView tvListRV;
     private TVShowsAdapter tvShowsAdapter;
     private TVShowsViewModel tvShowsViewModel;
+    private ProgressBar loadingIndicator;
+    private TextView errorMessageTV;
 
     private ArrayList<Integer> popularTVShowIds;
 
@@ -41,6 +48,8 @@ public class TVShowFragment extends Fragment implements TVShowsAdapter.OnTVShowC
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_t_v_show, container, false);
+        this.loadingIndicator = view.findViewById(R.id.pb_loading_indicator);
+        this.errorMessageTV = view.findViewById(R.id.tv_error_message);
         this.tvListRV = view.findViewById(R.id.rv_tv_list);
         this.tvListRV.setLayoutManager(new LinearLayoutManager(getActivity()));
         this.tvListRV.setHasFixedSize(true);
@@ -76,6 +85,27 @@ public class TVShowFragment extends Fragment implements TVShowsAdapter.OnTVShowC
                     public void onChanged(ArrayList<TVShowsData> tvShowsData) {
                         if (tvShowsData != null && tvShowsData.size() == popularTVShowIds.size()) {
                             tvShowsAdapter.updatePopularTVShows(tvShowsData);
+                        }
+                    }
+                }
+        );
+
+        this.tvShowsViewModel.getLoadingStatus().observe(
+                getActivity(),
+                new Observer<LoadingStatus>() {
+                    @Override
+                    public void onChanged(LoadingStatus loadingStatus) {
+                        if (loadingStatus == LoadingStatus.LOADING) {
+                            loadingIndicator.setVisibility(View.VISIBLE);
+                        } else if (loadingStatus == LoadingStatus.SUCCESS) {
+                            loadingIndicator.setVisibility(View.INVISIBLE);
+                            tvListRV.setVisibility(View.VISIBLE);
+                            errorMessageTV.setVisibility(View.INVISIBLE);
+                        } else {
+                            loadingIndicator.setVisibility(View.INVISIBLE);
+                            tvListRV.setVisibility(View.INVISIBLE);
+                            errorMessageTV.setVisibility(View.VISIBLE);
+                            errorMessageTV.setText(getString(R.string.loading_error, "ヽ(。_°)ノ"));
                         }
                     }
                 }
