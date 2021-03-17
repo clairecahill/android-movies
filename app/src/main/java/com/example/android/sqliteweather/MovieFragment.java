@@ -32,7 +32,7 @@ import java.util.ArrayList;
  * Use the {@link MovieFragment} factory method to
  * create an instance of this fragment.
  */
-public class MovieFragment extends Fragment implements MovieAdapter.OnMovieItemClickListener {
+public class MovieFragment extends Fragment implements MovieAdapter.OnMovieItemClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String TAG = MovieFragment.class.getSimpleName();
 
     private static final String MOVIEDB_APIKEY = "a9de941ba40e3e48d10c7644969d4781";
@@ -65,6 +65,7 @@ public class MovieFragment extends Fragment implements MovieAdapter.OnMovieItemC
         this.movieAdapter = new MovieAdapter(this);
         this.movieListRV.setAdapter(this.movieAdapter);
         this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        this.sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
         getActivity().setTitle("Movies");
 
@@ -85,9 +86,12 @@ public class MovieFragment extends Fragment implements MovieAdapter.OnMovieItemC
                             }
                             loadMovieData(MOVIEDB_APIKEY, popularMovieIds);
                         }
+
+                        movieAdapter.notifyDataSetChanged();
                     }
                 }
         );
+
 
         this.movieViewModel.getMovieData().observe(
                 getActivity(), new Observer<ArrayList<MovieData>>() {
@@ -124,9 +128,9 @@ public class MovieFragment extends Fragment implements MovieAdapter.OnMovieItemC
         return view;
     }
 
-    private void loadPopularMovies() {
-        this.movieViewModel.loadPopularMovies(MOVIEDB_APIKEY);
-    }
+//    private void loadPopularMovies() {
+//        this.movieViewModel.loadPopularMovies(MOVIEDB_APIKEY);
+//    }
 
     private void loadSortedMovies(String sort) {
         this.movieViewModel.loadPopularMovies(MOVIEDB_APIKEY, sort);
@@ -143,4 +147,9 @@ public class MovieFragment extends Fragment implements MovieAdapter.OnMovieItemC
         startActivity(intent);
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        Log.d("TAG", "loading in movie frag");
+        this.loadSortedMovies(sharedPreferences.getString(key, "popularity.desc"));
+    }
 }

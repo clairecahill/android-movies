@@ -96,9 +96,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieItemVie
             try {
                 convertedDate = sdf.parse(movieData.getReleaseDate());
                 String date = sdf2.format(convertedDate);
-                releaseDateTV.setText(ctx.getString(R.string.movie_release_date, date));
+                releaseDateTV.setText(ctx.getString(R.string.movie_release_date, movieData.getReleaseDate()));
             } catch (ParseException e) {
-                e.printStackTrace();
+                releaseDateTV.setText(ctx.getString(R.string.movie_release_date, "Unavailable Date"));
             }
 
             genreTV.setText(ctx.getString(R.string.genre, movieData.getGenre()));

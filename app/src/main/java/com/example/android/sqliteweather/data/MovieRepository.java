@@ -33,6 +33,7 @@ public class MovieRepository {
 
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(MovieData.class, new MovieData.JsonDeserializer())
+                .serializeNulls()
                 .create();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -55,11 +56,10 @@ public class MovieRepository {
             this.movies.setValue(null);
             this.loadingStatus.setValue(LoadingStatus.LOADING);
             ArrayList<MovieData> tempMovies = new ArrayList<>();
-//            Log.d(TAG, "sizeof array: " + ids.size());
+            Log.d(TAG, "ids: " + ids.size());
 
             for (int i = 0; i < ids.size(); i++) {
                 Call<MovieData> req = this.movieService.fetchMovieData(String.valueOf(ids.get(i)), apiKey);
-                //Log.d(TAG, "req: " + req);
                 req.enqueue(new Callback<MovieData>() {
                     @Override
                     public void onResponse(Call<MovieData> call, Response<MovieData> response) {

@@ -5,8 +5,11 @@ import android.util.Log;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+
+import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
@@ -47,34 +50,50 @@ public class MovieData implements Serializable {
     public String getGenre() { return this.genre; }
 
     public static class JsonDeserializer implements com.google.gson.JsonDeserializer<MovieData> {
+        private Object JsonNull;
+
         @Override
         public MovieData deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             JsonObject resultsObj = json.getAsJsonObject();
             JsonArray genreArr = resultsObj.getAsJsonArray("genres");
-            JsonObject genreObj = genreArr.get(0).getAsJsonObject();
-            //Log.d("heeheehoo", "genreObj" + genreObj);
 
-            if(resultsObj.getAsJsonPrimitive("poster_path")!=null) {
-                return new MovieData(
-                        resultsObj.getAsJsonPrimitive("title").getAsString(),
-                        (float)Math.round(resultsObj.getAsJsonPrimitive("popularity").getAsFloat()) / 100,
-                        resultsObj.getAsJsonPrimitive("overview").getAsString(),
-                        resultsObj.getAsJsonPrimitive("poster_path").getAsString(),
-                        resultsObj.getAsJsonPrimitive("release_date").getAsString(),
-                        (float)Math.round(resultsObj.getAsJsonPrimitive("vote_average").getAsFloat()),
-                        genreObj.getAsJsonPrimitive("name").getAsString()
-                );
-            } else {
-                return new MovieData(
-                        resultsObj.getAsJsonPrimitive("title").getAsString(),
-                        (float)Math.round(resultsObj.getAsJsonPrimitive("popularity").getAsFloat()) / 100,
-                        resultsObj.getAsJsonPrimitive("overview").getAsString(),
-                        null,
-                        resultsObj.getAsJsonPrimitive("release_date").getAsString(),
-                        (float)Math.round(resultsObj.getAsJsonPrimitive("vote_average").getAsFloat()),
-                        genreObj.getAsJsonPrimitive("name").getAsString()
-                );
+            String release_date = "null";
+            String poster = "null";
+            String overview = "null";
+            String genres = "null";
+
+            if (genreArr.size() > 0)
+            {
+                JsonObject genreObj = genreArr.get(0).getAsJsonObject();
+                genres = genreObj.getAsJsonPrimitive("name").getAsString();
             }
+
+            if (resultsObj.has("release_date"))
+            {
+                release_date = resultsObj.getAsJsonPrimitive("release_date").getAsString();
+            }
+
+            if (resultsObj.get("poster_path") == null)
+            {
+                Log.d("tag", " " + resultsObj.has("poster_path"));
+                poster = resultsObj.getAsJsonPrimitive("poster_path").getAsString();
+            }
+
+            if (resultsObj.has("overview"))
+            {
+                overview = resultsObj.getAsJsonPrimitive("overview").getAsString();
+            }
+
+            return new MovieData(
+                    resultsObj.getAsJsonPrimitive("title").getAsString(),
+                    (float) Math.round(resultsObj.getAsJsonPrimitive("popularity").getAsFloat()) / 100,
+                    overview,
+                    poster,
+                    release_date,
+                    (float) Math.round(resultsObj.getAsJsonPrimitive("vote_average").getAsFloat()),
+                    genres
+            );
+
         }
     }
 }
