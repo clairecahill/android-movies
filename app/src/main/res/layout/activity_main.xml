@@ -59,7 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:clickable="true"
-            android:onClick="addToSavedLocations"
+            android:onClick="addToWatchlist"
             android:background="#1ce783"
             android:paddingTop="2dp"
             android:paddingLeft="3dp"
@@ -75,7 +75,7 @@
             android:background="#c0c0c0"/>
 
         <TextView
-            android:id="@+id/tv_saved_locations"
+            android:id="@+id/watchlist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
