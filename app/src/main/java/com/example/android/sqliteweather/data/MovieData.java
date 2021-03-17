@@ -73,16 +73,27 @@ public class MovieData implements Serializable {
                 release_date = resultsObj.getAsJsonPrimitive("release_date").getAsString();
             }
 
-            if (resultsObj.get("poster_path") == null)
+            if (resultsObj.has("poster_path"))
             {
-                Log.d("tag", " " + resultsObj.has("poster_path"));
-                poster = resultsObj.getAsJsonPrimitive("poster_path").getAsString();
+                if(!resultsObj.get("poster_path").isJsonNull())
+                {
+                    Log.d("tag", " " + resultsObj.get("poster_path").toString());
+                    poster = resultsObj.getAsJsonPrimitive("poster_path").getAsString();
+                }
+            }
+
+            else if (resultsObj.get("poster_path") == JsonNull)
+            {
+                poster = "null";
             }
 
             if (resultsObj.has("overview"))
             {
                 overview = resultsObj.getAsJsonPrimitive("overview").getAsString();
             }
+
+
+            System.out.println("poster" + poster);
 
             return new MovieData(
                     resultsObj.getAsJsonPrimitive("title").getAsString(),

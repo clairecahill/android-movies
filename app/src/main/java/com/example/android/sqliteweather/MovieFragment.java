@@ -100,6 +100,7 @@ public class MovieFragment extends Fragment implements MovieAdapter.OnMovieItemC
                         if (movieData != null && movieData.size() == popularMovieIds.size()) {
                             movieAdapter.updatePopularMovies(movieData);
                         }
+                        movieAdapter.notifyDataSetChanged();
                     }
                 }
         );

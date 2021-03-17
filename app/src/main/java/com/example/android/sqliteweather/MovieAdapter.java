@@ -1,12 +1,14 @@
 package com.example.android.sqliteweather;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.android.sqliteweather.data.MovieData;
@@ -19,11 +21,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 
-public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieItemViewHolder> {
+public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieItemViewHolder>  {
     private ArrayList<MovieData> movies;
     private ArrayList<Float> test = new ArrayList <Float> ();
     private ArrayList<MovieData> tempMovies = new ArrayList <MovieData> ();
     private OnMovieItemClickListener onMovieItemClickListener;
+    private SharedPreferences sharedPreferences;
 
     public interface OnMovieItemClickListener {
         void onMovieItemClick(MovieData movieData);
@@ -60,15 +63,16 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieItemVie
             {
                 if (test.get(i) == (float)movies.get(j).getPopularity())
                 {
-                    System.out.println(test.get(i) + " " + movies.get(j).getPopularity());
+//                    System.out.println(test.get(i) + " " + movies.get(j).getPopularity());
+//                    System.out.println(test.get(i) + " " + movies.get(j).getIconUrl());
                     tempMovies.add(movies.get(j));
                 }
             }
         }
 
-        this.movies = tempMovies;
-
         notifyDataSetChanged();
+
+        this.movies = tempMovies;
     }
 
     @Override
