@@ -8,15 +8,13 @@ import androidx.room.RoomDatabase;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-@Database(entities = {CitiesRepo.class}, version = 1)
+@Database(entities = {FilmsEntityRepository.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
     private static volatile AppDatabase INSTANCE;
-
     private static final int NUM_THREADS = 4;
     static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUM_THREADS);
 
-    public abstract SavedCitiesDao savedCitiesDao();
+    public abstract SavedFilmsDAO savedFilmsDAO();
 
     static AppDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {

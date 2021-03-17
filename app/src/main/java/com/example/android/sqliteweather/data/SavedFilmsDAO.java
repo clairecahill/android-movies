@@ -7,18 +7,16 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-
 import java.util.List;
 
-
 @Dao
-public interface SavedCitiesDao {
+public interface SavedFilmsDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(CitiesRepo city);
+    void insert(FilmsEntityRepository film);
 
     @Delete
-    void delete(CitiesRepo city);
+    void delete(FilmsEntityRepository film);
 
-    @Query("SELECT * FROM location ORDER BY timestamp DESC")
-    LiveData<List<CitiesRepo>> getAllCities();
+    @Query("SELECT * FROM films ORDER BY timestamp DESC")
+    LiveData<List<FilmsEntityRepository>> getAllLocations();
 }
