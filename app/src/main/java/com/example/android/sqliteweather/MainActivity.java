@@ -70,7 +70,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private SavedFilmsViewModel filmVM;
     private SavedFilmsAdapter savedFilmsAdapter;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         this.movieItemsRV = findViewById(R.id.nav_drawer_id);
         this.movieItemsRV.setLayoutManager(new LinearLayoutManager(this));
         this.movieItemsRV.setHasFixedSize(true);
+
         this.filmVM = new ViewModelProvider(this).get(SavedFilmsViewModel.class);
         this.savedFilmsAdapter = new SavedFilmsAdapter( this);
         this.movieItemsRV.setAdapter(savedFilmsAdapter);
