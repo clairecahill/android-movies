@@ -59,11 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:clickable="true"
-<<<<<<< HEAD
             android:onClick="addToWatchlist"
-=======
-            android:onClick="addToSavedLocations"
->>>>>>> b2e2ed5a3e3fc160dfa92120f0de5bcf98437bdd
             android:background="#1ce783"
             android:paddingTop="2dp"
             android:paddingLeft="3dp"
@@ -79,11 +75,7 @@
             android:background="#c0c0c0"/>
 
         <TextView
-<<<<<<< HEAD
             android:id="@+id/watchlist"
-=======
-            android:id="@+id/tv_saved_locations"
->>>>>>> b2e2ed5a3e3fc160dfa92120f0de5bcf98437bdd
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
