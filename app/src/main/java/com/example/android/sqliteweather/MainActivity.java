@@ -43,22 +43,22 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     /*
      * To use your own OpenWeather API key, create a file called `gradle.properties` in your
      * GRADLE_USER_HOME directory (this will usually be `$HOME/.gradle/` in MacOS/Linux and
-     * `$USER_HOME/.gradle/` in Windows), and add the following line:
-     *
-     *   OPENWEATHER_API_KEY="<put_your_own_OpenWeather_API_key_here>"
-     *
-     * The Gradle build for this project is configured to automatically grab that value and store
+            * `$USER_HOME/.gradle/` in Windows), and add the following line:
+            *
+            *   OPENWEATHER_API_KEY="<put_your_own_OpenWeather_API_key_here>"
+            *
+            * The Gradle build for this project is configured to automatically grab that value and store
      * it in the field `BuildConfig.OPENWEATHER_API_KEY` that's used below.  You can read more
-     * about this setup on the following pages:
-     *
-     *   https://developer.android.com/studio/build/gradle-tips#share-custom-fields-and-resource-values-with-your-app-code
-     *
-     *   https://docs.gradle.org/current/userguide/build_environment.html#sec:gradle_configuration_properties
-     *
-     * Alternatively, you can just hard-code your API key below 🤷‍.  If you do hard code your API
+            * about this setup on the following pages:
+            *
+            *   https://developer.android.com/studio/build/gradle-tips#share-custom-fields-and-resource-values-with-your-app-code
+            *
+            *   https://docs.gradle.org/current/userguide/build_environment.html#sec:gradle_configuration_properties
+            *
+            * Alternatively, you can just hard-code your API key below 🤷‍.  If you do hard code your API
      * key below, make sure to get rid of the following line (line 18) in build.gradle:
-     *
-     *   buildConfigField("String", "OPENWEATHER_API_KEY", OPENWEATHER_API_KEY)
+            *
+            *   buildConfigField("String", "OPENWEATHER_API_KEY", OPENWEATHER_API_KEY)
      */
 //    private static final String OPENWEATHER_APPID = BuildConfig.OPENWEATHER_API_KEY;
     private static final String OPENWEATHER_APPID = "2048a626b634d6fc16289af021a195e6";
