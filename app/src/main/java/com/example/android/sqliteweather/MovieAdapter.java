@@ -11,13 +11,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.android.sqliteweather.data.MovieData;
 
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieItemViewHolder> {
     private ArrayList<MovieData> movies;
+    private ArrayList<Float> test = new ArrayList <Float> ();
+    private ArrayList<MovieData> tempMovies = new ArrayList <MovieData> ();
     private OnMovieItemClickListener onMovieItemClickListener;
 
     public interface OnMovieItemClickListener {
@@ -43,6 +48,26 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieItemVie
 
     public void updatePopularMovies(ArrayList<MovieData> movies) {
         this.movies = movies;
+        for (int i = 0; i < movies.size(); i++)
+        {
+            test.add(movies.get(i).getPopularity());
+            Collections.sort(test, Collections.reverseOrder());
+        }
+
+        for (int i = 0; i < movies.size(); i++)
+        {
+            for (int j = 0; j < movies.size(); j++)
+            {
+                if (test.get(i) == (float)movies.get(j).getPopularity())
+                {
+                    System.out.println(test.get(i) + " " + movies.get(j).getPopularity());
+                    tempMovies.add(movies.get(j));
+                }
+            }
+        }
+
+        this.movies = tempMovies;
+
         notifyDataSetChanged();
     }
 
