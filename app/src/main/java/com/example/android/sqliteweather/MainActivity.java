@@ -17,6 +17,7 @@ import androidx.appcompat.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -181,6 +182,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             case R.id.action_settings:
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
+                return true;
+            case R.id.action_map:
+                String latlong = sharedPreferences.getString("lat_long", "44.5638,123.2794");
+                Uri intentUri = Uri.parse("geo:" + latlong);
+                Intent map = new Intent(Intent.ACTION_VIEW, intentUri);
+                startActivity(map);
                 return true;
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
