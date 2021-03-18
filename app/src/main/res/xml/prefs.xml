@@ -14,4 +14,9 @@
 
     <EditTextPreference
         />
+
+    <EditTextPreference
+        android:title="@string/pref_lat_long_title"
+        android:key="@string/pref_lat_long_key"/>
+
 </PreferenceScreen>
