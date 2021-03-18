@@ -1,5 +1,7 @@
 package com.example.android.sqliteweather.data;
 
+import android.util.Log;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
@@ -44,20 +46,67 @@ public class TVShowsData implements Serializable {
     public String getGenre() { return this.genre; }
 
     public static class JsonDeserializer implements com.google.gson.JsonDeserializer<TVShowsData> {
+        private Object JsonNull;
         @Override
         public TVShowsData deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             JsonObject resultsObj = json.getAsJsonObject();
             JsonArray genreArr = resultsObj.getAsJsonArray("genres");
-            JsonObject genreObj = genreArr.get(0).getAsJsonObject();
+            //JsonObject genreObj = genreArr.get(0).getAsJsonObject();
+
+            String release_date = "null";
+            String poster = "null";
+            String overview = "null";
+            String genres = "null";
+
+            if (genreArr.size() > 0)
+            {
+                JsonObject genreObj = genreArr.get(0).getAsJsonObject();
+                genres = genreObj.getAsJsonPrimitive("name").getAsString();
+            }
+
+            if (resultsObj.has("release_date"))
+            {
+                release_date = resultsObj.getAsJsonPrimitive("release_date").getAsString();
+            }
+
+            if (resultsObj.has("poster_path"))
+            {
+                if(!resultsObj.get("poster_path").isJsonNull())
+                {
+                    Log.d("tag", " " + resultsObj.get("poster_path").toString());
+                    poster = resultsObj.getAsJsonPrimitive("poster_path").getAsString();
+                }
+            }
+
+            else if (resultsObj.get("poster_path") == JsonNull)
+            {
+                poster = "null";
+            }
+
+            if (resultsObj.has("overview"))
+            {
+                overview = resultsObj.getAsJsonPrimitive("overview").getAsString();
+            }
+
+
+            System.out.println("poster" + poster);
 
             return new TVShowsData(
                     resultsObj.getAsJsonPrimitive("name").getAsString(),
-                    (float)Math.round(resultsObj.getAsJsonPrimitive("popularity").getAsFloat()) / 100,
-                    resultsObj.getAsJsonPrimitive("overview").getAsString(),
-                    resultsObj.getAsJsonPrimitive("poster_path").getAsString(),
-                    resultsObj.getAsJsonPrimitive("first_air_date").getAsString(),
-                    (float)Math.round(resultsObj.getAsJsonPrimitive("vote_average").getAsFloat()),
-                    genreObj.getAsJsonPrimitive("name").getAsString()
+                    (float)resultsObj.getAsJsonPrimitive("popularity").getAsFloat(),
+                    overview,
+                    poster,
+                    release_date,
+                    (float) Math.round(resultsObj.getAsJsonPrimitive("vote_average").getAsFloat()),
+                    genres
+//                    resultsObj.getAsJsonPrimitive("name").getAsString(),
+////                    (float)Math.round(resultsObj.getAsJsonPrimitive("popularity").getAsFloat()) / 100,
+//                    (float)resultsObj.getAsJsonPrimitive("popularity").getAsFloat(),
+//                    resultsObj.getAsJsonPrimitive("overview").getAsString(),
+//                    resultsObj.getAsJsonPrimitive("poster_path").getAsString(),
+//                    resultsObj.getAsJsonPrimitive("first_air_date").getAsString(),
+//                    (float)Math.round(resultsObj.getAsJsonPrimitive("vote_average").getAsFloat()),
+//                    genreObj.getAsJsonPrimitive("name").getAsString()
             );
         }
     }

@@ -94,7 +94,6 @@ public class PopularMovieRepository {
                     popularMovies.setValue(response.body());
                     loadingStatus.setValue(LoadingStatus.SUCCESS);
                 }
-
                 else {
                     loadingStatus.setValue(LoadingStatus.ERROR);
                     Log.d(TAG, "unsuccessful API request: " + call.request().url());

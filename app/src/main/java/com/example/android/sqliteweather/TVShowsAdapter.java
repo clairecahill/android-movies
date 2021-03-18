@@ -1,6 +1,7 @@
 package com.example.android.sqliteweather;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,16 +10,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.android.sqliteweather.data.MovieData;
 import com.example.android.sqliteweather.data.TVShowsData;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 public class TVShowsAdapter extends RecyclerView.Adapter<TVShowsAdapter.TVShowItemViewHolder> {
     private ArrayList<TVShowsData> TVShows;
+    private ArrayList<String> test = new ArrayList <String> ();
+    private ArrayList<Float> testF = new ArrayList<Float>();
+    private ArrayList<TVShowsData> tempTVShows = new ArrayList <TVShowsData> ();
     private OnTVShowClickListener onTVShowClickListener;
+    private SharedPreferences sharedPreferences;
 
     public interface OnTVShowClickListener {
         void onTVItemClick(TVShowsData TVShows);
@@ -42,8 +49,79 @@ public class TVShowsAdapter extends RecyclerView.Adapter<TVShowsAdapter.TVShowIt
     }
 
 
-    public void updatePopularTVShows(ArrayList<TVShowsData> TVShows) {
+    public void updatePopularTVShows(String sort, ArrayList<TVShowsData> TVShows) {
         this.TVShows = TVShows;
+
+        test.clear();
+        testF.clear();
+        tempTVShows.clear();
+        String[] parts = sort.split("\\.");
+
+        //Decide which thing to sort on
+        for (int i = 0; i < TVShows.size(); i++)
+        {
+            switch(parts[0]) {
+//                case "release_date":
+//                    test.add(String.valueOf(TVShows.get(i).getReleaseDate()));
+//                    break;
+                case "original_title":
+                    test.add(String.valueOf(TVShows.get(i).getTitle()));
+                    break;
+                case "vote_average":
+                    testF.add(TVShows.get(i).getVoteAverage());
+                    break;
+                default:
+                    testF.add(TVShows.get(i).getPopularity());
+                    break;
+            }
+        }
+
+        //Order it ascending or descending
+        if(parts[1] == "asc") {
+            if(!test.isEmpty()) {
+                Collections.sort(test);
+            } else {
+                Collections.sort(testF);
+            }
+        } else {
+            if(!test.isEmpty()) {
+                Collections.sort(test, Collections.reverseOrder());
+            } else {
+                Collections.sort(testF, Collections.reverseOrder());
+            }
+        }
+
+        for (int i = 0; i < TVShows.size(); i++)
+        {
+            for (int j = 0; j < TVShows.size(); j++)
+            {
+                switch(parts[0]) {
+//                    case "release_date":
+//                        if (test.get(i) == String.valueOf(TVShows.get(j).getReleaseDate())) {
+//                            tempTVShows.add(TVShows.get(j));
+//                        }
+//                        break;
+                    case "original_title":
+                        if (test.get(i) == String.valueOf(TVShows.get(j).getTitle())) {
+                            tempTVShows.add(TVShows.get(j));
+                        }
+                        break;
+                    case "vote_average":
+                        if (testF.get(i) == TVShows.get(j).getVoteAverage()) {
+                            tempTVShows.add(TVShows.get(j));
+                        }
+                        break;
+                    default:
+                        if (testF.get(i) == TVShows.get(j).getPopularity()) {
+                            tempTVShows.add(TVShows.get(j));
+                        }
+                        break;
+                }
+            }
+        }
+
+
+        this.TVShows = tempTVShows;
         notifyDataSetChanged();
     }
 
@@ -99,7 +177,7 @@ public class TVShowsAdapter extends RecyclerView.Adapter<TVShowsAdapter.TVShowIt
                 String date = sdf2.format(convertedDate);
                 releaseDateTV.setText(ctx.getString(R.string.movie_release_date, date));
             } catch (ParseException e) {
-                e.printStackTrace();
+                releaseDateTV.setText(ctx.getString(R.string.movie_release_date, "Unavailable Date"));
             }
 
             genreTV.setText(ctx.getString(R.string.genre, popularTVShows.getGenre()));

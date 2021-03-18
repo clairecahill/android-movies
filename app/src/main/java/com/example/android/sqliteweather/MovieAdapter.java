@@ -64,9 +64,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieItemVie
         for (int i = 0; i < movies.size(); i++)
         {
             switch(parts[0]) {
-                case "release_date":
-                    test.add(String.valueOf(movies.get(i).getReleaseDate()));
-                    break;
+//                case "release_date":
+//                    test.add(String.valueOf(movies.get(i).getReleaseDate()));
+//                    break;
                 case "original_title":
                     test.add(String.valueOf(movies.get(i).getTitle()));
                     break;
@@ -99,11 +99,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieItemVie
             for (int j = 0; j < movies.size(); j++)
             {
                 switch(parts[0]) {
-                    case "release_date":
-                        if (test.get(i) == String.valueOf(movies.get(j).getReleaseDate())) {
-                            tempMovies.add(movies.get(j));
-                        }
-                        break;
+//                    case "release_date":
+//                        if (test.get(i) == String.valueOf(movies.get(j).getReleaseDate())) {
+//                            tempMovies.add(movies.get(j));
+//                        }
+//                        break;
                     case "original_title":
                         if (test.get(i) == String.valueOf(movies.get(j).getTitle())) {
                             tempMovies.add(movies.get(j));

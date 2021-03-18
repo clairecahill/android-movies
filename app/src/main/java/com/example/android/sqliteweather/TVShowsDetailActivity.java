@@ -39,10 +39,16 @@ public class TVShowsDetailActivity extends AppCompatActivity {
         {
             this.TVShowsData = (TVShowsData) intent.getSerializableExtra(EXTRA_TV_DATA);
             ImageView movieIconIV = findViewById(R.id.iv_detailed_tv_icon);
-            String movieUrl = ICON_URL_FORMAT_STR + this.TVShowsData.getIconUrl();
-            Glide.with(this)
+
+            if (this.TVShowsData.getIconUrl() == "null")
+            {
+
+            } else {
+                String movieUrl = ICON_URL_FORMAT_STR + this.TVShowsData.getIconUrl();
+                Glide.with(this)
                     .load(movieUrl)
                     .into(movieIconIV);
+            }
 
             TextView popularMovieDetailedDataTV = findViewById(R.id.tv_detailed_show_title);
             popularMovieDetailedDataTV.setText(this.TVShowsData.getTitle());
@@ -54,13 +60,25 @@ public class TVShowsDetailActivity extends AppCompatActivity {
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             SimpleDateFormat sdf2 = new SimpleDateFormat("MMMM dd, yyyy");
-            Date convertedDate = null;
-            try {
-                convertedDate = sdf.parse(TVShowsData.getFirstAirDate());
-                String date = sdf2.format(convertedDate);
-                releaseDateTV.setText(getString(R.string.movie_release_date, date));
-            } catch (ParseException e) {
-                e.printStackTrace();
+//            Date convertedDate = null;
+//            try {
+//                convertedDate = sdf.parse(TVShowsData.getFirstAirDate());
+//                String date = sdf2.format(convertedDate);
+//                releaseDateTV.setText(getString(R.string.movie_release_date, date));
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+
+            if (TVShowsData.getFirstAirDate() != "null")
+            {
+                Date convertedDate = null;
+                try {
+                    convertedDate = sdf.parse(TVShowsData.getFirstAirDate());
+                    String date = sdf2.format(convertedDate);
+                    releaseDateTV.setText(getString(R.string.movie_release_date, date));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
 
             int voteAverage = (int) TVShowsData.getVoteAverage();

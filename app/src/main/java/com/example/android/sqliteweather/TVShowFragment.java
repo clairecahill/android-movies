@@ -1,14 +1,17 @@
 package com.example.android.sqliteweather;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +32,7 @@ import java.util.ArrayList;
  * Use the {@link TVShowFragment#} factory method to
  * create an instance of this fragment.
  */
-public class TVShowFragment extends Fragment implements TVShowsAdapter.OnTVShowClickListener {
+public class TVShowFragment extends Fragment implements TVShowsAdapter.OnTVShowClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String MOVIEDB_APIKEY = "a9de941ba40e3e48d10c7644969d4781";
     private RecyclerView tvListRV;
     private TVShowsAdapter tvShowsAdapter;
@@ -38,6 +41,8 @@ public class TVShowFragment extends Fragment implements TVShowsAdapter.OnTVShowC
     private TextView errorMessageTV;
 
     private ArrayList<Integer> popularTVShowIds;
+    private SharedPreferences sharedPreferences;
+
 
     public TVShowFragment() {
         // Required empty public constructor
@@ -57,12 +62,17 @@ public class TVShowFragment extends Fragment implements TVShowsAdapter.OnTVShowC
         this.tvShowsViewModel = new ViewModelProvider(this).get(TVShowsViewModel.class);
         this.tvShowsAdapter = new TVShowsAdapter(this);
         this.tvListRV.setAdapter(this.tvShowsAdapter);
+        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        this.sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
         getActivity().setTitle("TV Shows");
         setHasOptionsMenu(true);
 
         this.popularTVShowIds = new ArrayList<>();
-        this.loadPopularTVShows();
+        //this.loadPopularTVShows();
+
+        String sort = sharedPreferences.getString(getString(R.string.pref_sort_by), "");
+        this.loadSortedTVShows(sort);
 
         this.tvShowsViewModel.getPopularTVShows().observe(
                 getActivity(), new Observer<PopularTVShows>() {
@@ -84,7 +94,7 @@ public class TVShowFragment extends Fragment implements TVShowsAdapter.OnTVShowC
                     @Override
                     public void onChanged(ArrayList<TVShowsData> tvShowsData) {
                         if (tvShowsData != null && tvShowsData.size() == popularTVShowIds.size()) {
-                            tvShowsAdapter.updatePopularTVShows(tvShowsData);
+                            tvShowsAdapter.updatePopularTVShows(sort, tvShowsData);
                         }
                     }
                 }
@@ -114,8 +124,12 @@ public class TVShowFragment extends Fragment implements TVShowsAdapter.OnTVShowC
         return view;
     }
 
-    private void loadPopularTVShows() {
-        this.tvShowsViewModel.loadPopularTVShows(MOVIEDB_APIKEY);
+//    private void loadPopularTVShows() {
+//        this.tvShowsViewModel.loadPopularTVShows(MOVIEDB_APIKEY);
+//    }
+
+    private void loadSortedTVShows(String sort) {
+        this.tvShowsViewModel.loadPopularTVShows(MOVIEDB_APIKEY, sort);
     }
 
     private void loadTVShowData() { this.tvShowsViewModel.loadTVShowsData(MOVIEDB_APIKEY, this.popularTVShowIds);}
@@ -125,5 +139,11 @@ public class TVShowFragment extends Fragment implements TVShowsAdapter.OnTVShowC
         Intent intent = new Intent(getActivity(), TVShowsDetailActivity.class);
         intent.putExtra(TVShowsDetailActivity.EXTRA_TV_DATA, popularTVShows);
         startActivity(intent);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        Log.d("TAG", "loading in movie frag");
+        this.loadSortedTVShows(sharedPreferences.getString(key, "popularity.desc"));
     }
 }
