@@ -30,4 +30,10 @@
         <item>@string/va_desc_ent</item>
     </string-array>
 
+    <string-array name="dialogue_box_decisions">
+        <item>@string/cancel_option</item>
+        <item>@string/movie_option</item>
+        <item>@string/tv_option</item>
+    </string-array>
+
 </resources>

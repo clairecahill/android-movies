@@ -90,6 +90,10 @@
     <string name="pref_units_metric_wind_display">m/s</string>
     <string name="pref_units_imperial_wind_display">mph</string>
 
+    <string name="movie_option">Add Movie</string>
+    <string name="tv_option">Add Television Show</string>
+    <string name="cancel_option">Cancel</string>
+
     <!--    Other strings-->
     <string name="navigation_settings">navigation_settings</string>
     <!-- TODO: Remove or change this placeholder text -->
