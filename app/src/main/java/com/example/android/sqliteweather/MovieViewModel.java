@@ -37,8 +37,12 @@ public class MovieViewModel extends ViewModel {
 
     public LiveData<ArrayList<MovieData>> getMovieData() { return this.movieData; }
 
-    public void loadPopularMovies(String apiKey) {
-        this.popularMovieRepository.loadPopularMovies(apiKey);
+//    public void loadPopularMovies(String apiKey) {
+//        this.popularMovieRepository.loadPopularMovies(apiKey);
+//    }
+
+    public void loadPopularMovies(String apiKey, String sort) {
+        this.popularMovieRepository.loadPopularMovies(apiKey, sort);
     }
 
     public void loadMovieData(String apiKey, ArrayList<Integer> ids) {

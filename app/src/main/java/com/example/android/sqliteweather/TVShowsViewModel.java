@@ -36,8 +36,12 @@ public class TVShowsViewModel extends ViewModel {
 
     public LiveData<ArrayList<TVShowsData>> getTvShowsData() { return this.tvShowsData; }
 
-    public void loadPopularTVShows(String apiKey) {
-        this.repository.loadPopularTVShows(apiKey);
+//    public void loadPopularTVShows(String apiKey) {
+//        this.repository.loadPopularTVShows(apiKey);
+//    }
+
+    public void loadPopularTVShows(String apiKey, String sort) {
+        this.repository.loadPopularTVShows(apiKey, sort);
     }
 
     public void loadTVShowsData(String apiKey, ArrayList<Integer> ids) {

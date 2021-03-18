@@ -161,8 +161,18 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
 
     @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+    protected void onDestroy() {
+        this.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+        super.onDestroy();
+    }
 
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        Log.d(TAG, "changed prefs, key: " + key + " value:" + sharedPreferences.getString(key, ""));
+        this.finish();
+        Intent refresh = new Intent(this, MainActivity.class);
+        startActivity(refresh);
     }
 
     @Override

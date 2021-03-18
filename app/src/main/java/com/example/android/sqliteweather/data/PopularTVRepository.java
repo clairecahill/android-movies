@@ -33,6 +33,7 @@ public class PopularTVRepository {
 
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(PopularResult.class, new PopularResult.JsonDeserializer())
+                .serializeNulls()
                 .create();
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -46,18 +47,18 @@ public class PopularTVRepository {
 
     public LiveData<LoadingStatus> getLoadingStatus() { return this.loadingStatus; }
 
-    public void loadPopularTVShows(String apiKey)
+    public void loadPopularTVShows(String apiKey, String sort)
     {
         Log.d(TAG, "fetching new popular tv show data");
         this.popularTVShows.setValue(null);
         this.loadingStatus.setValue(LoadingStatus.LOADING);
 
-        Call<PopularTVShows> req = this.TVService.fetchPopularTVShows(apiKey);
+        Call<PopularTVShows> req = this.TVService.fetchSortedTVShows(apiKey, sort);
         req.enqueue(new Callback<PopularTVShows>() {
             @Override
             public void onResponse(Call<PopularTVShows> call, Response<PopularTVShows> response) {
                 if (response.code() == 200) {
-                    Log.d(TAG, "successful response");
+                    Log.d(TAG, "successful response: " + call.request().url());
                     popularTVShows.setValue(response.body());
                     loadingStatus.setValue(LoadingStatus.SUCCESS);
                 } else {

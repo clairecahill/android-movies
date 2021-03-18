@@ -1,24 +1,35 @@
 package com.example.android.sqliteweather;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.android.sqliteweather.data.MovieData;
 
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 
-public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieItemViewHolder> {
+public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieItemViewHolder>  {
     private ArrayList<MovieData> movies;
+    private ArrayList<String> test = new ArrayList <String> ();
+    private ArrayList<Float> testF = new ArrayList<Float>();
+    private ArrayList<MovieData> tempMovies = new ArrayList <MovieData> ();
     private OnMovieItemClickListener onMovieItemClickListener;
+    private SharedPreferences sharedPreferences;
 
     public interface OnMovieItemClickListener {
         void onMovieItemClick(MovieData movieData);
@@ -41,8 +52,78 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieItemVie
         holder.bind(this.movies.get(position));
     }
 
-    public void updatePopularMovies(ArrayList<MovieData> movies) {
+    public void updatePopularMovies(String sort, ArrayList<MovieData> movies) {
         this.movies = movies;
+
+        test.clear();
+        testF.clear();
+        tempMovies.clear();
+        String[] parts = sort.split("\\.");
+
+        //Decide which thing to sort on
+        for (int i = 0; i < movies.size(); i++)
+        {
+            switch(parts[0]) {
+//                case "release_date":
+//                    test.add(String.valueOf(movies.get(i).getReleaseDate()));
+//                    break;
+                case "original_title":
+                    test.add(String.valueOf(movies.get(i).getTitle()));
+                    break;
+                case "vote_average":
+                    testF.add(movies.get(i).getVoteAverage());
+                    break;
+                default:
+                    testF.add(movies.get(i).getPopularity());
+                    break;
+            }
+        }
+
+        //Order it ascending or descending
+        if(parts[1] == "asc") {
+            if(!test.isEmpty()) {
+                Collections.sort(test);
+            } else {
+                Collections.sort(testF);
+            }
+        } else {
+            if(!test.isEmpty()) {
+                Collections.sort(test, Collections.reverseOrder());
+            } else {
+                Collections.sort(testF, Collections.reverseOrder());
+            }
+        }
+
+        for (int i = 0; i < movies.size(); i++)
+        {
+            for (int j = 0; j < movies.size(); j++)
+            {
+                switch(parts[0]) {
+//                    case "release_date":
+//                        if (test.get(i) == String.valueOf(movies.get(j).getReleaseDate())) {
+//                            tempMovies.add(movies.get(j));
+//                        }
+//                        break;
+                    case "original_title":
+                        if (test.get(i) == String.valueOf(movies.get(j).getTitle())) {
+                            tempMovies.add(movies.get(j));
+                        }
+                        break;
+                    case "vote_average":
+                        if (testF.get(i) == movies.get(j).getVoteAverage()) {
+                            tempMovies.add(movies.get(j));
+                        }
+                        break;
+                    default:
+                        if (testF.get(i) == movies.get(j).getPopularity()) {
+                            tempMovies.add(movies.get(j));
+                        }
+                        break;
+                }
+            }
+        }
+
+        this.movies = tempMovies;
         notifyDataSetChanged();
     }
 
@@ -96,9 +177,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieItemVie
             try {
                 convertedDate = sdf.parse(movieData.getReleaseDate());
                 String date = sdf2.format(convertedDate);
-                releaseDateTV.setText(ctx.getString(R.string.movie_release_date, date));
+                releaseDateTV.setText(ctx.getString(R.string.movie_release_date, movieData.getReleaseDate()));
             } catch (ParseException e) {
-                e.printStackTrace();
+                releaseDateTV.setText(ctx.getString(R.string.movie_release_date, "Unavailable Date"));
             }
 
             genreTV.setText(ctx.getString(R.string.genre, movieData.getGenre()));

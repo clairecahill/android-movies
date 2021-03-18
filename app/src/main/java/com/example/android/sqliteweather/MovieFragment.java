@@ -1,11 +1,13 @@
 package com.example.android.sqliteweather;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,7 +32,7 @@ import java.util.ArrayList;
  * Use the {@link MovieFragment} factory method to
  * create an instance of this fragment.
  */
-public class MovieFragment extends Fragment implements MovieAdapter.OnMovieItemClickListener {
+public class MovieFragment extends Fragment implements MovieAdapter.OnMovieItemClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String TAG = MovieFragment.class.getSimpleName();
 
     private static final String MOVIEDB_APIKEY = "a9de941ba40e3e48d10c7644969d4781";
@@ -41,6 +43,7 @@ public class MovieFragment extends Fragment implements MovieAdapter.OnMovieItemC
     private TextView errorMessageTV;
 
     private ArrayList<Integer> popularMovieIds;
+    private SharedPreferences sharedPreferences;
 
     public MovieFragment()
     {
@@ -61,11 +64,16 @@ public class MovieFragment extends Fragment implements MovieAdapter.OnMovieItemC
         this.movieViewModel = new ViewModelProvider(this).get(MovieViewModel.class);
         this.movieAdapter = new MovieAdapter(this);
         this.movieListRV.setAdapter(this.movieAdapter);
+        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        this.sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
         getActivity().setTitle("Movies");
 
         this.popularMovieIds = new ArrayList<>();
-        this.loadPopularMovies();
+
+        String sort = sharedPreferences.getString(getString(R.string.pref_sort_by), "");
+        this.loadSortedMovies(sort);
+        //this.loadPopularMovies();
 
         this.movieViewModel.getPopularMovies().observe(
                 getActivity(), new Observer<PopularMovies>() {
@@ -78,17 +86,21 @@ public class MovieFragment extends Fragment implements MovieAdapter.OnMovieItemC
                             }
                             loadMovieData(MOVIEDB_APIKEY, popularMovieIds);
                         }
+
+                        movieAdapter.notifyDataSetChanged();
                     }
                 }
         );
+
 
         this.movieViewModel.getMovieData().observe(
                 getActivity(), new Observer<ArrayList<MovieData>>() {
                     @Override
                     public void onChanged(ArrayList<MovieData> movieData) {
                         if (movieData != null && movieData.size() == popularMovieIds.size()) {
-                            movieAdapter.updatePopularMovies(movieData);
+                            movieAdapter.updatePopularMovies(sort, movieData);
                         }
+                        movieAdapter.notifyDataSetChanged();
                     }
                 }
         );
@@ -117,8 +129,12 @@ public class MovieFragment extends Fragment implements MovieAdapter.OnMovieItemC
         return view;
     }
 
-    private void loadPopularMovies() {
-        this.movieViewModel.loadPopularMovies(MOVIEDB_APIKEY);
+//    private void loadPopularMovies() {
+//        this.movieViewModel.loadPopularMovies(MOVIEDB_APIKEY);
+//    }
+
+    private void loadSortedMovies(String sort) {
+        this.movieViewModel.loadPopularMovies(MOVIEDB_APIKEY, sort);
     }
 
     private void loadMovieData(String apiKey, ArrayList<Integer> ids) {
@@ -132,4 +148,9 @@ public class MovieFragment extends Fragment implements MovieAdapter.OnMovieItemC
         startActivity(intent);
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        Log.d("TAG", "loading in movie frag");
+        this.loadSortedMovies(sharedPreferences.getString(key, "popularity.desc"));
+    }
 }

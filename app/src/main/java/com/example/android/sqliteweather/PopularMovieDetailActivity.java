@@ -42,10 +42,21 @@ public class PopularMovieDetailActivity extends AppCompatActivity {
         {
             this.popularMovieData = (MovieData) intent.getSerializableExtra(EXTRA_MOVIE_DATA);
             ImageView movieIconIV = findViewById(R.id.iv_detailed_movie_icon);
-            String movieUrl = ICON_URL_FORMAT_STR + this.popularMovieData.getIconUrl();
-            Glide.with(this)
-                    .load(movieUrl)
-                    .into(movieIconIV);
+
+            if (this.popularMovieData.getIconUrl() == "null")
+            {
+
+            }
+
+            else
+            {
+                String movieUrl = ICON_URL_FORMAT_STR + this.popularMovieData.getIconUrl();
+
+                Glide.with(this)
+                        .load(movieUrl)
+                        .into(movieIconIV);
+            }
+
 
             TextView popularMovieDetailedDataTV = findViewById(R.id.tv_detailed_movie_title);
             popularMovieDetailedDataTV.setText(this.popularMovieData.getTitle());
@@ -58,13 +69,17 @@ public class PopularMovieDetailActivity extends AppCompatActivity {
             System.out.println(popularMovieData.getReleaseDate());
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             SimpleDateFormat sdf2 = new SimpleDateFormat("MMMM dd, yyyy");
-            Date convertedDate = null;
-            try {
-                convertedDate = sdf.parse(popularMovieData.getReleaseDate());
-                String date = sdf2.format(convertedDate);
-                releaseDateTV.setText(getString(R.string.movie_release_date, date));
-            } catch (ParseException e) {
-                e.printStackTrace();
+
+            if (popularMovieData.getReleaseDate() != "null")
+            {
+                Date convertedDate = null;
+                try {
+                    convertedDate = sdf.parse(popularMovieData.getReleaseDate());
+                    String date = sdf2.format(convertedDate);
+                    releaseDateTV.setText(getString(R.string.movie_release_date, date));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
 
             int voteAverage = (int) popularMovieData.getVoteAverage();

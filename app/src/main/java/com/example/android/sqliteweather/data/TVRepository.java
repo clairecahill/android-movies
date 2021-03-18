@@ -35,6 +35,7 @@ public class TVRepository {
 
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(TVShowsData.class, new TVShowsData.JsonDeserializer())
+                .serializeNulls()
                 .create();
 
         Retrofit retrofit = new Retrofit.Builder()

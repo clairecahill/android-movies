@@ -47,75 +47,67 @@ public class PopularMovieRepository {
         return this.loadingStatus;
     }
 
-    public void loadPopularMovies(String apiKey) {
-//        if (shouldFetchForecast(location, units)) {
-            Log.d(TAG, "fetching new popular movie data");
-            this.popularMovies.setValue(null);
-            this.loadingStatus.setValue(LoadingStatus.LOADING);
-            Call<PopularMovies> req = this.movieService.fetchPopularMovies(apiKey);
-            req.enqueue(new Callback<PopularMovies>() {
-                @Override
-                public void onResponse(Call<PopularMovies> call, Response<PopularMovies> response) {
-                    if (response.code() == 200) {
-                        Log.d(TAG, "successful response");
-                        popularMovies.setValue(response.body());
-                        loadingStatus.setValue(LoadingStatus.SUCCESS);
-                    } else {
-                        loadingStatus.setValue(LoadingStatus.ERROR);
-                        Log.d(TAG, "unsuccessful API request: " + call.request().url());
-                        Log.d(TAG, "  -- response status code: " + response.code());
-                        Log.d(TAG, "  -- response: " + response.toString());
-                    }
-                }
+//    public void loadPopularMovies(String apiKey) {
+////        if (shouldFetchForecast(location, units)) {
+//            Log.d(TAG, "fetching new popular movie data");
+//            this.popularMovies.setValue(null);
+//            this.loadingStatus.setValue(LoadingStatus.LOADING);
+//            Call<PopularMovies> req = this.movieService.fetchPopularMovies(apiKey);
+//            req.enqueue(new Callback<PopularMovies>() {
+//                @Override
+//                public void onResponse(Call<PopularMovies> call, Response<PopularMovies> response) {
+//                    if (response.code() == 200) {
+//                        Log.d(TAG, "successful response: " + call.request().url());
+//                        popularMovies.setValue(response.body());
+//                        loadingStatus.setValue(LoadingStatus.SUCCESS);
+//                    } else {
+//                        loadingStatus.setValue(LoadingStatus.ERROR);
+//                        Log.d(TAG, "unsuccessful API request: " + call.request().url());
+//                        Log.d(TAG, "  -- response status code: " + response.code());
+//                        Log.d(TAG, "  -- response: " + response.toString());
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<PopularMovies> call, Throwable t) {
+//                    loadingStatus.setValue(LoadingStatus.ERROR);
+//                    Log.d(TAG, "unsuccessful API request: " + call.request().url());
+//                    t.printStackTrace();
+//                }
+//            });
+////        } else {
+////            Log.d(TAG, "using cached forecast data for location: " + location + ", units: " + units);
+////        }
+//    }
 
-                @Override
-                public void onFailure(Call<PopularMovies> call, Throwable t) {
+    public void loadPopularMovies(String apiKey, String sort) {
+//        if (shouldFetchForecast(location, units)) {
+        Log.d(TAG, "fetching new popular movie data");
+        this.popularMovies.setValue(null);
+        this.loadingStatus.setValue(LoadingStatus.LOADING);
+        Call<PopularMovies> req = this.movieService.fetchSortedMovies(apiKey, sort);
+        req.enqueue(new Callback<PopularMovies>() {
+            @Override
+            public void onResponse(Call<PopularMovies> call, Response<PopularMovies> response) {
+                if (response.code() == 200) {
+                    Log.d(TAG, "in sorting successful response: " + call.request().url());
+                    popularMovies.setValue(response.body());
+                    loadingStatus.setValue(LoadingStatus.SUCCESS);
+                }
+                else {
                     loadingStatus.setValue(LoadingStatus.ERROR);
                     Log.d(TAG, "unsuccessful API request: " + call.request().url());
-                    t.printStackTrace();
+                    Log.d(TAG, "  -- response status code: " + response.code());
+                    Log.d(TAG, "  -- response: " + response.toString());
                 }
-            });
-//        } else {
-//            Log.d(TAG, "using cached forecast data for location: " + location + ", units: " + units);
-//        }
-    }
+            }
 
-//    private boolean shouldFetchForecast(String location, String units) {
-//        /*
-//         * Fetch forecast if there isn't currently one stored.
-//         */
-//        FiveDayForecast currentForecast = this.fiveDayForecast.getValue();
-//        if (currentForecast == null) {
-//            return true;
-//        }
-//
-//        /*
-//         * Fetch forecast if there was an error fetching the last one.
-//         */
-//        if (this.loadingStatus.getValue() == LoadingStatus.ERROR) {
-//            return true;
-//        }
-//
-//        /*
-//         * Fetch forecast if either location or units have changed.
-//         */
-//        if (!TextUtils.equals(location, this.currentLocation) || !TextUtils.equals(units, this.currentUnits)) {
-//            return true;
-//        }
-//
-//        /*
-//         * Fetch forecast if the earliest of the current forecast data is timestamped before "now".
-//         */
-//        if (currentForecast.getForecastDataList() != null && currentForecast.getForecastDataList().size() > 0) {
-//            ForecastData firstForecastData = currentForecast.getForecastDataList().get(0);
-//            if (firstForecastData.getEpoch() * 1000L < System.currentTimeMillis()) {
-//                return true;
-//            }
-//        }
-//
-//        /*
-//         * Otherwise, don't fetch the forecast.
-//         */
-//        return false;
-//    }
+            @Override
+            public void onFailure(Call<PopularMovies> call, Throwable t) {
+                loadingStatus.setValue(LoadingStatus.ERROR);
+                Log.d(TAG, "unsuccessful API request: " + call.request().url());
+                t.printStackTrace();
+            }
+        });
+    }
 }

@@ -17,4 +17,10 @@ public interface MovieService {
         String id,
         @Query("api_key") String apiKey
     );
+
+    @GET("discover/movie")
+    Call<PopularMovies> fetchSortedMovies(
+      @Query("api_key") String apiKey,
+      @Query("sort_by") String sort
+    );
 }

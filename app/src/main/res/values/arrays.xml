@@ -12,9 +12,28 @@
         <item>@string/pref_units_standard_entry</item>
     </string-array>
 
+    <string-array name="pref_sort_values">
+        <item>@string/pop_asc_val</item>
+        <item>@string/pop_desc_val</item>
+        <item>@string/ot_asc_val</item>
+        <item>@string/ot_desc_val</item>
+        <item>@string/va_asc_val</item>
+        <item>@string/va_desc_val</item>
+    </string-array>
+
+    <string-array name="pref_sort_entries">
+        <item>@string/pop_asc_ent</item>
+        <item>@string/pop_desc_ent</item>
+        <item>@string/ot_asc_ent</item>
+        <item>@string/ot_desc_ent</item>
+        <item>@string/va_asc_ent</item>
+        <item>@string/va_desc_ent</item>
+    </string-array>
+
     <string-array name="dialogue_box_decisions">
         <item>@string/cancel_option</item>
         <item>@string/movie_option</item>
         <item>@string/tv_option</item>
     </string-array>
+
 </resources>

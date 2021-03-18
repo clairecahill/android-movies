@@ -17,4 +17,10 @@ public interface TVService {
                     String id,
             @Query("api_key") String apiKey
     );
+
+    @GET("discover/tv")
+    Call<PopularTVShows> fetchSortedTVShows(
+            @Query("api_key") String apiKey,
+            @Query("sort_by") String sort
+    );
 }
