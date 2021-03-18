@@ -97,7 +97,8 @@ public class MovieData implements Serializable {
 
             return new MovieData(
                     resultsObj.getAsJsonPrimitive("title").getAsString(),
-                    (float) Math.round(resultsObj.getAsJsonPrimitive("popularity").getAsFloat()) / 100,
+//                    (float) Math.round(resultsObj.getAsJsonPrimitive("popularity").getAsFloat()) / 100,
+                    (float)resultsObj.getAsJsonPrimitive("popularity").getAsFloat(),
                     overview,
                     poster,
                     release_date,

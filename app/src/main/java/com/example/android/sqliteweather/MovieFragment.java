@@ -98,7 +98,7 @@ public class MovieFragment extends Fragment implements MovieAdapter.OnMovieItemC
                     @Override
                     public void onChanged(ArrayList<MovieData> movieData) {
                         if (movieData != null && movieData.size() == popularMovieIds.size()) {
-                            movieAdapter.updatePopularMovies(movieData);
+                            movieAdapter.updatePopularMovies(sort, movieData);
                         }
                         movieAdapter.notifyDataSetChanged();
                     }

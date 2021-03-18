@@ -17,16 +17,10 @@
         <item>@string/pop_desc_val</item>
         <item>@string/rd_asc_val</item>
         <item>@string/rd_desc_val</item>
-        <item>@string/rev_asc_val</item>
-        <item>@string/rev_desc_val</item>
-        <item>@string/prd_asc_val</item>
-        <item>@string/prd_desc_val</item>
         <item>@string/ot_asc_val</item>
         <item>@string/ot_desc_val</item>
         <item>@string/va_asc_val</item>
         <item>@string/va_desc_val</item>
-        <item>@string/vc_asc_val</item>
-        <item>@string/vc_desc_val</item>
     </string-array>
 
     <string-array name="pref_sort_entries">
@@ -34,16 +28,10 @@
         <item>@string/pop_desc_ent</item>
         <item>@string/rd_asc_ent</item>
         <item>@string/rd_desc_ent</item>
-        <item>@string/rev_asc_ent</item>
-        <item>@string/rev_desc_ent</item>
-        <item>@string/prd_asc_ent</item>
-        <item>@string/prd_desc_ent</item>
         <item>@string/ot_asc_ent</item>
         <item>@string/ot_desc_ent</item>
         <item>@string/va_asc_ent</item>
         <item>@string/va_desc_ent</item>
-        <item>@string/vc_asc_ent</item>
-        <item>@string/vc_desc_ent</item>
     </string-array>
 
 </resources>
